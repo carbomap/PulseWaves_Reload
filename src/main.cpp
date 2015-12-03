@@ -7,17 +7,14 @@
 //
 
 #include <iostream>
-#include "PulseWaves.hpp"
+#include "inc/PulseWaves.hpp"
 
 int main(int argc, const char * argv[]) {
-    
-     PulseWaves plsObj("/Users/antoine/Processing_Temp_Folder/Bertholdstein_process_need_sptaial_indexing/q560/Bertholdstein - Q560_9996619 - 150528_133849 - originalpoints.pls");
-    
-    unsigned int tt;
-    std::cout << sizeof(tt) << std::endl;
-    
-    unsigned short toto = plsObj.getPulseSize();
-    std::cout << toto << std::endl;
-    
-    return 0;
+
+	PulseWaves plsObj("/Users/antoine/Processing_Temp_Folder/Bertholdstein_process_need_sptaial_indexing/q560/Bertholdstein - Q560_9996619 - 150528_133849 - originalpoints.pls");
+
+	boost::uint16_t toto = plsObj.getPulseSize();
+	std::cout << toto << std::endl;
+
+	return 0;
 }
