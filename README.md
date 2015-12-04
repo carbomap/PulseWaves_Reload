@@ -55,12 +55,13 @@ WINDOWS (Visual Studio) using CMake gui
 UNIX/LINUX (Eclipse) using CMake command line 
   - Pull the code from: https://github.com/carbomap/PulseWaves_Reload.git
   - Start terminal and cd to "src" folder 
-  - Enter cmake . 
-  - Enter make 
-  - Enter make all 
+  - > cmake . 
+  - > make 
+  - > make all 
 
 MAINTAINERS
 ----------------
 
   Antoine Cottin, Carbomap Ltd, Edinburgh           <info@carbomap.com>
+
   Puneet Chhabra, Heriot-Watt University, Edinburgh <psc31@hw.ac.uk>
