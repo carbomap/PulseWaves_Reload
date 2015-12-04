@@ -1,0 +1,16 @@
+TODO
+
+IMMINENT
+-------------------
+
+1. Find a common solution to absolute/relative paths (Solution: Boost::FileSystem)
+2. User control (Solution: Boost::Program_options)
+3. Think PulseWaves limitations and what can be added? 
+
+LONG-TERM
+-------------------
+
+1. Decision on gui architecture and design (MVC, layered, etc.)
+2. Narrow down core functionalities - pulse editing, filtered selection etc.
+3. Can we include existing pulse decomposition code (RJMCMC) in to this framework?
+... 
