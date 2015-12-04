@@ -6,7 +6,7 @@
 //  Copyright © 2015 Antoine Cottin. All rights reserved.
 //
 
-#include "PulseWaves.hpp"
+#include "../includes/PulseWaves.hpp"
 #include <iostream>
 #include <boost/lexical_cast.hpp>
 

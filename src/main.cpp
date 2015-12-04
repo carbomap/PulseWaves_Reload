@@ -7,7 +7,7 @@
 //
 
 #include <iostream>
-#include "inc/PulseWaves.hpp"
+#include "../includes/PulseWaves.hpp"
 
 int main(int argc, const char * argv[]) {
 
