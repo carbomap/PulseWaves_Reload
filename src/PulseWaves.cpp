@@ -19,10 +19,12 @@ PulseWaves::PulseWaves(string inFile)
 	//    this->setPlsHeader();
 	//    this->setPlsPulserec();
 	//    this->setWvsHeader();
-	this->readHeader();
+	
 	wvsHeader_ 	= new wvs_header;
 	plsHeader_ 	= new pls_header;
 	plsPulserec = new pls_pulserec;
+    
+    this->readHeader();
 	this->displayHeaderInformation();
 
 };
@@ -171,7 +173,7 @@ void PulseWaves::readHeader()
 	plsFile.close();
 
 	// assigning the read structure into the object data member
-	setPlsHeader();
+	//setPlsHeader();
 	*plsHeader_ = plsHeader;
 
 
