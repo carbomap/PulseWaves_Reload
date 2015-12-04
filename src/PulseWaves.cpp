@@ -9,6 +9,7 @@
 #include "../includes/PulseWaves.hpp"
 #include <iostream>
 #include <boost/lexical_cast.hpp>
+#include <boost/variant.hpp>
 #include <map>
 
 using namespace std;
@@ -199,6 +200,8 @@ void PulseWaves::readVLR()
     
     // Creating a map to hold the VLR header records
     std::map<int, vlr_header_strc> vlrHeaderMap;
+    // for testing just now
+    std::map<std::string, boost::variant<scanner_vlr_strc, pulseSampling_vlr_strc, lookUpTable_vlr_strc, lutRecord_vlr_strc, samplingRecord_strc> > vlrRecordMap ;
     
     // instantiation of the fstream class object
     std::fstream plsFile;
@@ -217,7 +220,7 @@ void PulseWaves::readVLR()
         
         // for the time being as no actual VLR record is read, just jump to the next vlr Header
         plsFile.seekg(vlsHeader.recordLengthAfterHeader, ios::cur);
-
+        
     }
     
     // Closing the file pointer

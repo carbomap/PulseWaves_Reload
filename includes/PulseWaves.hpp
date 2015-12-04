@@ -22,26 +22,26 @@
 using namespace std;
 
 
-#define PULSEWAVESDLL_USER_ID_SIZE                                  16
-#define PULSEWAVESDLL_DESCRIPTION_SIZE                              64
-#define PULSEWAVESDLL_UNDEFINED                                     0
-#define PULSEWAVESDLL_OUTGOING                                      1
-#define PULSEWAVESDLL_RETURNING                                     2
-#define PULSEWAVESDLL_OSCILLATING                                   1
-#define PULSEWAVESDLL_LINE                                          2
-#define PULSEWAVESDLL_CONIC                                         3
-#define PULSEWAVESDLL_OPTICAL_CENTER_AND_ANCHOR_POINT_COINCIDE      0x0
-#define PULSEWAVESDLL_OPTICAL_CENTER_AND_ANCHOR_POINT_FLUCTUATE     0x8FFFFFFF
-#define PULSEWAVESDLL_PULSE_FORMAT_0                                0
-#define PULSEWAVESDLL_PULSE_ATTRIBUTES_PULSE_SOURCE_ID_16BIT        0x00000001
-#define PULSEWAVESDLL_PULSE_ATTRIBUTES_PULSE_SOURCE_ID_32BIT        0x00000002
-#define PULSEWAVESDLL_PULSE_FORMAT_0_SIZE                           48
-#define PULSEWAVESDLL_PULSE_ATTRIBUTES_PULSE_SOURCE_ID_16BIT_SIZE   2
-#define PULSEWAVESDLL_PULSE_ATTRIBUTES_PULSE_SOURCE_ID_32BIT_SIZE   4
-#define PULSEWAVESDLL_EMPTY_TABLE_ENTRY                             -2.0e+37f
-#define PULSEWAVESDLL_TABLE_UNDEFINED                               0
-#define PULSEWAVESDLL_TABLE_INTENSITY_CORRECTION                    1
-#define PULSEWAVESDLL_TABLE_RANGE_CORRECTION                        2
+#define PLS_USER_ID_SIZE                                  16
+#define PLS_DESCRIPTION_SIZE                              64
+#define PLS_UNDEFINED                                     0
+#define PLS_OUTGOING                                      1
+#define PLS_RETURNING                                     2
+#define PLS_OSCILLATING                                   1
+#define PLS_LINE                                          2
+#define PLS_CONIC                                         3
+#define PLS_OPTICAL_CENTER_AND_ANCHOR_POINT_COINCIDE      0x0
+#define PLS_OPTICAL_CENTER_AND_ANCHOR_POINT_FLUCTUATE     0x8FFFFFFF
+#define PLS_PULSE_FORMAT_0                                0
+#define PLS_PULSE_ATTRIBUTES_PULSE_SOURCE_ID_16BIT        0x00000001
+#define PLS_PULSE_ATTRIBUTES_PULSE_SOURCE_ID_32BIT        0x00000002
+#define PLS_PULSE_FORMAT_0_SIZE                           48
+#define PLS_PULSE_ATTRIBUTES_PULSE_SOURCE_ID_16BIT_SIZE   2
+#define PLS_PULSE_ATTRIBUTES_PULSE_SOURCE_ID_32BIT_SIZE   4
+#define PLS_EMPTY_TABLE_ENTRY                             -2.0e+37f
+#define PLS_TABLE_UNDEFINED                               0
+#define PLS_TABLE_INTENSITY_CORRECTION                    1
+#define PLS_TABLE_RANGE_CORRECTION                        2
 
 
 #pragma pack(push, r1, 1)
@@ -101,11 +101,11 @@ struct wvs_header_strc{
 
 #pragma pack(push, r1, 1)
 struct vlr_header_strc{
-    boost::int8_t       userID[16];
+    boost::int8_t       userID[PLS_USER_ID_SIZE];
     boost::uint32_t     recordID;
     boost::uint32_t     reserved;
     boost::int64_t      recordLengthAfterHeader;
-    boost::int8_t       description[64];
+    boost::int8_t       description[PLS_DESCRIPTION_SIZE];
 };
 #pragma pack(pop, r1)
 
@@ -129,11 +129,11 @@ struct pls_pulserec_strc{
 
 #pragma pack(push, r1, 1)
 struct avlr_header_strc{
-    boost::int8_t       userID[16];
+    boost::int8_t       userID[PLS_USER_ID_SIZE];
     boost::uint32_t     recordID;
     boost::uint32_t     reserved;
     boost::int64_t      recordLengthBeforeFooter;
-    boost::int8_t       description[64];
+    boost::int8_t       description[PLS_DESCRIPTION_SIZE];
 };
 #pragma pack(pop, r1)
 
@@ -157,7 +157,7 @@ struct scanner_vlr_strc{
     float               beamDivergeance;
     float               minimalRange;
     float               maximalRange;
-    boost::int8_t       description[64];
+    boost::int8_t       description[PLS_DESCRIPTION_SIZE];
 };
 #pragma pack(pop, r1)
 
@@ -173,7 +173,7 @@ struct pulseSampling_vlr_strc{
     float               sampleUnit;
     boost::uint32_t     compression;
     boost::uint32_t     scannerIndex;
-    boost::int8_t       description[64];
+    boost::int8_t       description[PLS_DESCRIPTION_SIZE];
 };
 #pragma pack(pop, r1)
 
@@ -184,7 +184,7 @@ struct lookUpTable_vlr_strc{
     boost::uint32_t     size;
     boost::uint32_t     reserved;
     boost::uint32_t     numberOfTable;
-    boost::int8_t       description[64];
+    boost::int8_t       description[PLS_DESCRIPTION_SIZE];
 };
 #pragma pack(pop, r1)
 
@@ -199,7 +199,7 @@ struct lutRecord_vlr_strc{
     boost::uint8_t      dataType;
     boost::uint8_t      options;
     boost::uint32_t     compression;
-    boost::int8_t       description[64];
+    boost::int8_t       description[PLS_DESCRIPTION_SIZE];
 };
 #pragma pack(pop, r1)
 
@@ -223,7 +223,7 @@ struct samplingRecord_strc{
     boost::uint16_t     lutIndex;
     float               sampleUnits;
     boost::uint32_t     compression;
-    boost::int8_t       description[64];
+    boost::int8_t       description[PLS_DESCRIPTION_SIZE];
 };
 #pragma pack(pop, r1)
 
