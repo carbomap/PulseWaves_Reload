@@ -9,52 +9,48 @@
 #include "../includes/PulseWaves.hpp"
 #include <iostream>
 #include <boost/lexical_cast.hpp>
+#include <map>
 
 using namespace std;
 
+
+//-----------------------------------------------------------
+
 PulseWaves::PulseWaves(string inFile)
 {
-	plsFilePath_ = inFile;
-	std::cout << plsFilePath_ << std::endl;
-	//    this->setPlsHeader();
-	//    this->setPlsPulserec();
-	//    this->setWvsHeader();
 	
-	wvsHeader_ 	= new wvs_header;
-	plsHeader_ 	= new pls_header;
-	plsPulserec = new pls_pulserec;
+    plsFilePath_ = inFile;
+	std::cout << "Opening " << plsFilePath_ << " file for read..." << std::endl;
+    std::cout << "" << std::endl;
+
+	plsHeader_ 	= new pls_header_strc;
+	plsPulserec_ = new pls_pulserec_strc;
+    wvsHeader_ 	= new wvs_header_strc;
     
     this->readHeader();
 	this->displayHeaderInformation();
+    
+    this->readVLR();
+    this->readData();
+    this->readAVLR();
 
 };
 
-// Default destructor
-//~PulseWaves(){};
 
-// public methods for the header
-void PulseWaves::setPlsHeader()
-{
-	plsHeader_ = new pls_header;
-}
-
-void PulseWaves::setWvsHeader()
-{
-	wvsHeader_ = new wvs_header;
-}
-
-void PulseWaves::setPlsPulserec()
-{
-	plsPulserec = new pls_pulserec;
-}
-
+//+---------------------------------------------------------+
+//|                                                         |
+//|                 Public Methods for Header               |
+//|                                                         |
+//+---------------------------------------------------------+
 void PulseWaves::displayHeaderInformation() const
 {
 
+    this->printSep();
+    
 	std::cout << "" << std::endl;
 
 	std::cout << "File signature:\t\t ";
-	for (int i =0; i < 16; i++) {
+	for (int i = 0; i < 16; i++) {
 		std::cout << plsHeader_->fileSignature[i];
 	}
 	std::cout << std::endl;
@@ -109,7 +105,8 @@ void PulseWaves::displayHeaderInformation() const
 
 }
 
-pls_header PulseWaves::getPlsHeader() const {return *plsHeader_;}
+
+pls_header_strc PulseWaves::getPlsHeader() const {return *plsHeader_;}
 string PulseWaves::getSystemID() const {return boost::lexical_cast<std::string>(*plsHeader_->systemID);}
 string PulseWaves::getSoftwareID() const {return boost::lexical_cast<std::string>(*plsHeader_->generatingSoftware);}
 boost::uint16_t PulseWaves::getDay() const {return plsHeader_->day;}
@@ -143,17 +140,33 @@ double PulseWaves::getZMin()const{return plsHeader_->minZ;}
 double PulseWaves::getZMax()const{return plsHeader_->maxZ;}
 
 
-// public methods for the vlr
+
+//+---------------------------------------------------------+
+//|                                                         |
+//|                  Public Methods for VLR                 |
+//|                                                         |
+//+---------------------------------------------------------+
+
+
 
 // public methods for the data block
 
 
+
+//-----------------------------------------------------------
 // Private methods for reading the file
+void PulseWaves::printSep() const
+{
+    std::cout << "##################################################" << std::endl;
+};
+
+
+
 void PulseWaves::readHeader()
 {
 
 	// getting header structure
-	pls_header plsHeader;
+	pls_header_strc plsHeader;
 
 	// instantiation of the fstream class object
 	std::fstream plsFile;
@@ -180,19 +193,46 @@ void PulseWaves::readHeader()
 };
 
 
-void readVLR()
+void PulseWaves::readVLR()
+{
+    this->printSep();
+    
+    // Creating a map to hold the VLR header records
+    std::map<int, vlr_header_strc> vlrHeaderMap;
+    
+    // instantiation of the fstream class object
+    std::fstream plsFile;
+    plsFile.open(plsFilePath_.c_str(), std::ios::in | std::ios::binary);
+    
+    // pointing the cursor at the beginning of the VLR Block
+    plsFile.seekg(plsHeader_->headerSize, ios::beg);
+
+    vlr_header_strc vlsHeader;
+    
+    // reading the VLR
+    for (int i = 0; i < plsHeader_->nVLR; i++) {
+        plsFile.read((char *)&vlsHeader, sizeof(vlsHeader));
+        
+        vlrHeaderMap.insert ( std::pair<int,vlr_header_strc>(i,vlsHeader) );
+        
+        // for the time being as no actual VLR record is read, just jump to the next vlr Header
+        plsFile.seekg(vlsHeader.recordLengthAfterHeader, ios::cur);
+
+    }
+    
+    // Closing the file pointer
+    plsFile.close();
+    
+};
+
+
+void PulseWaves::readData()
 {
 
 };
 
 
-void readData()
-{
-
-};
-
-
-void readAVLR()
+void PulseWaves::readAVLR()
 {
 
 };

@@ -18,11 +18,34 @@
 
 #endif /* PulseWaves_hpp */
 
+
 using namespace std;
 
 
+#define PULSEWAVESDLL_USER_ID_SIZE                                  16
+#define PULSEWAVESDLL_DESCRIPTION_SIZE                              64
+#define PULSEWAVESDLL_UNDEFINED                                     0
+#define PULSEWAVESDLL_OUTGOING                                      1
+#define PULSEWAVESDLL_RETURNING                                     2
+#define PULSEWAVESDLL_OSCILLATING                                   1
+#define PULSEWAVESDLL_LINE                                          2
+#define PULSEWAVESDLL_CONIC                                         3
+#define PULSEWAVESDLL_OPTICAL_CENTER_AND_ANCHOR_POINT_COINCIDE      0x0
+#define PULSEWAVESDLL_OPTICAL_CENTER_AND_ANCHOR_POINT_FLUCTUATE     0x8FFFFFFF
+#define PULSEWAVESDLL_PULSE_FORMAT_0                                0
+#define PULSEWAVESDLL_PULSE_ATTRIBUTES_PULSE_SOURCE_ID_16BIT        0x00000001
+#define PULSEWAVESDLL_PULSE_ATTRIBUTES_PULSE_SOURCE_ID_32BIT        0x00000002
+#define PULSEWAVESDLL_PULSE_FORMAT_0_SIZE                           48
+#define PULSEWAVESDLL_PULSE_ATTRIBUTES_PULSE_SOURCE_ID_16BIT_SIZE   2
+#define PULSEWAVESDLL_PULSE_ATTRIBUTES_PULSE_SOURCE_ID_32BIT_SIZE   4
+#define PULSEWAVESDLL_EMPTY_TABLE_ENTRY                             -2.0e+37f
+#define PULSEWAVESDLL_TABLE_UNDEFINED                               0
+#define PULSEWAVESDLL_TABLE_INTENSITY_CORRECTION                    1
+#define PULSEWAVESDLL_TABLE_RANGE_CORRECTION                        2
+
+
 #pragma pack(push, r1, 1)
-struct pls_header{
+struct pls_header_strc{
 	boost::int8_t	fileSignature[16];
 	boost::uint32_t globalParameter;
 	boost::uint32_t fileSourceID;
@@ -66,29 +89,144 @@ struct pls_header{
 #pragma pack(pop, r1)
 
 
-struct wvs_header{
-	char signature[16];
-	unsigned long compression;
-	char reserve[44];
+
+#pragma pack(push, r1, 1)
+struct wvs_header_strc{
+	boost::int8_t       signature[16];
+	boost::uint32_t     compression;
+    boost::uint8_t      reserve[44];
+};
+#pragma pack(pop, r1)
+
+
+#pragma pack(push, r1, 1)
+struct vlr_header_strc{
+    boost::int8_t       userID[16];
+    boost::uint32_t     recordID;
+    boost::uint32_t     reserved;
+    boost::int64_t      recordLengthAfterHeader;
+    boost::int8_t       description[64];
+};
+#pragma pack(pop, r1)
+
+
+struct pls_pulserec_strc{
+	boost::int64_t      gpsTime; 		//        ; GPS time
+    boost::int64_t      waveOffset; 	//        ; Bytes offset to wave record
+	boost::int32_t      anchorX; 		//        ; Anchor point of the wave
+	boost::int32_t      anchorY; 		//        ; Anchor point of the wave
+	boost::int32_t      anchorZ; 		//        ; Anchor point of the wave
+	boost::int32_t      targetX; 		//        ; Ending point of the wave
+	boost::int32_t      targetY; 		//        ; Ending point of the wave
+	boost::int32_t      targetZ; 		//        ; Ending point of the wave
+	boost::int16_t      firstReturn; 	//        ; Duration in sampling units from the anchor point to the first recorded waveform sample
+	boost::int16_t      lastReturn; 	//        ; Duration in sampling units from the anchor point to the last recorded waveform sample
+	boost::uint16_t     pulseDesIndex; 	//		  ; Pulse description index bit 0-7; Reserved bit 8-11; Edge of scan line bit 12; Scan direction bit 13; Mirror facet bit 14-15
+	boost::uint8_t      intensity; 		//        ; Intensity of the pulse in DN
+	boost::uint8_t      classification; //        ; Classification of the pulse
 };
 
 
-
-struct pls_pulserec{
-	long long 		gpsTime; 		//        ; GPS time
-	long long 		waveOffset; 	//        ; Bytes offset to wave record
-	long 			anchorX; 		//        ; Anchor point of the wave
-	long 			anchorY; 		//        ; Anchor point of the wave
-	long 			anchorZ; 		//        ; Anchor point of the wave
-	long 			targetX; 		//        ; Ending point of the wave
-	long 			targetY; 		//        ; Ending point of the wave
-	long 			targetZ; 		//        ; Ending point of the wave
-	short 			firstReturn; 	//        ; Duration in sampling units from the anchor point to the first recorded waveform sample
-	short 			lastReturn; 	//        ; Duration in sampling units from the anchor point to the last recorded waveform sample
-	unsigned short 	pulseDesIndex; 	//		  ; Pulse description index bit 0-7; Reserved bit 8-11; Edge of scan line bit 12; Scan direction bit 13; Mirror facet bit 14-15
-	char 			intensity; 		//        ; Intensity of the pulse in DN
-	char 			classification; //        ; Classification of the pulse
+#pragma pack(push, r1, 1)
+struct avlr_header_strc{
+    boost::int8_t       userID[16];
+    boost::uint32_t     recordID;
+    boost::uint32_t     reserved;
+    boost::int64_t      recordLengthBeforeFooter;
+    boost::int8_t       description[64];
 };
+#pragma pack(pop, r1)
+
+
+// The Scanner VLR descriptor - 100,001 <= Record ID < 100,255
+#pragma pack(push, r1, 1)
+struct scanner_vlr_strc{
+    boost::uint32_t     size;
+    boost::uint32_t     reserved;
+    boost::int8_t       instrument[64];
+    boost::int8_t       serial[64];
+    float               avelength;
+    float               outgoingPulseWidth;
+    boost::uint32_t     scanPattern;
+    boost::uint32_t     numberOfMirrorFacets;
+    boost::int32_t      scanFrequency;
+    boost::int32_t      scanMinAngle;
+    boost::int32_t      scanMaxAngle;
+    boost::int32_t      pulseFrequency;
+    float               beamDiameterAtExit;
+    float               beamDivergeance;
+    float               minimalRange;
+    float               maximalRange;
+    boost::int8_t       description[64];
+};
+#pragma pack(pop, r1)
+
+
+// The Pulse Sampling VLR descriptor - 200,001 <= Record ID < 200,255
+#pragma pack(push, r1, 1)
+struct pulseSampling_vlr_strc{
+    boost::uint32_t     size;
+    boost::uint32_t     reserved;
+    boost::int32_t      opticalCenterToAnchorPoint;
+    boost::uint16_t     numberOfExtraWaveBytes;
+    boost::uint16_t     numberOfSamplings;
+    float               sampleUnit;
+    boost::uint32_t     compression;
+    boost::uint32_t     scannerIndex;
+    boost::int8_t       description[64];
+};
+#pragma pack(pop, r1)
+
+
+// The Look-Up Table VLR descriptor - 300,001 <= Record ID < 300,255
+#pragma pack(push, r1, 1)
+struct lookUpTable_vlr_strc{
+    boost::uint32_t     size;
+    boost::uint32_t     reserved;
+    boost::uint32_t     numberOfTable;
+    boost::int8_t       description[64];
+};
+#pragma pack(pop, r1)
+
+
+// The Look-Up Table Record VLR descriptor
+#pragma pack(push, r1, 1)
+struct lutRecord_vlr_strc{
+    boost::uint32_t     size;
+    boost::uint32_t     reserved;
+    boost::uint32_t     numberOfEntries;
+    boost::uint16_t     unitOfMeasurement;
+    boost::uint8_t      dataType;
+    boost::uint8_t      options;
+    boost::uint32_t     compression;
+    boost::int8_t       description[64];
+};
+#pragma pack(pop, r1)
+
+
+
+// The Sampling Record
+#pragma pack(push, r1, 1)
+struct samplingRecord_strc{
+    boost::uint32_t     size;
+    boost::uint32_t     reserved;
+    boost::uint8_t      channel;
+    boost::uint8_t      notUsed;
+    boost::uint8_t      bitsForDurationFromAnchor;
+    float               scaleForDurationFromAnchor;
+    float               offsetForDurationFromAnchor;
+    boost::uint8_t      bitsForNumberOfSegments;
+    boost::uint8_t      bitsForNumberOfSamples;
+    boost::uint16_t     numberOfSegments;
+    boost::uint32_t     numberOfSamples;
+    boost::uint16_t     bitsPerSample;
+    boost::uint16_t     lutIndex;
+    float               sampleUnits;
+    boost::uint32_t     compression;
+    boost::int8_t       description[64];
+};
+#pragma pack(pop, r1)
+
 
 
 
@@ -98,18 +236,19 @@ class PulseWaves
 	// Private data members
 	string plsFilePath_;            // String representing the fully qualified file name path
 	string wvsFilePath_;            // String representing the fully qualified file name path of the corresponding waveform file
-	pls_header *plsHeader_;         // Pointer to the Header of the WVS file
+	pls_header_strc *plsHeader_;         // Pointer to the Header of the WVS file
 	//plsVlrArray_;                 // Pointer to the Variable Length Records (in reading order - Header/Key)
 	//pulserec *plsPulseDes;        // Pointer to an array of structure holding all the Pulse descriptor VLR
-	pls_pulserec *plsPulserec;      // Pointer to the records of the PLS file hold in the data member
+	pls_pulserec_strc *plsPulserec_;      // Pointer to the records of the PLS file hold in the data member
 	//plsPulseInd;                  // Pointer to the index of the records from the PLS file hold in plsPulseRec
 	//plsPulseIndSel;               // Pointer to an index of the selected pulses defined by pulsewaves::getPulses
 	//plsAvlrarray;                 // Pointer to the Append Variable Length Records (in reading order - Header/Key)
-	wvs_header *wvsHeader_;         // Pointer to the header of the WVS file
+	wvs_header_strc *wvsHeader_;         // Pointer to the header of the WVS file
 	//wvsWaveRec;                   // Pointer to the records of the WVS file corresponding to the records in plsPulseRec
 	//wvsWaveInd;
 
 	// Private methods for reading the file
+    void printSep() const;
 	void readHeader();
 	void readVLR();
 	void readData();
@@ -121,14 +260,16 @@ public:
 	// Default constructor
 	PulseWaves(string);
 	// Default destructor
-	//~PulseWaves();
+    ~PulseWaves()
+    {
+        delete plsHeader_;
+        delete plsPulserec_;
+        delete wvsHeader_;
+    };
 
 	// public methods for the header
 	void displayHeaderInformation() const;
-	void setPlsHeader();
-	void setWvsHeader();
-	void setPlsPulserec();
-	pls_header 		getPlsHeader() const;
+	pls_header_strc getPlsHeader() const;
 	string 			getSystemID() const;
 	string 			getSoftwareID() const;
 	boost::uint16_t getDay() const;
