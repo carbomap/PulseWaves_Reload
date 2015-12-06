@@ -1,7 +1,8 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6 FATAL_ERROR)
-PROJECT(pulsewaves_reload)
 FIND_PACKAGE(Boost)
-INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS} includes) 
-ADD_EXECUTABLE(pulsewaves_reload PulseWaves.cpp vlrClass.cpp main.cpp ../includes/PulseWaves.hpp ../includes/PulseWavesDefs.hpp ../includes/vlrClass.hpp)
-TARGET_LINK_LIBRARIES(pulsewaves_reload ${Boost_LIBRARY_DIR})
-
+set(PULSEWAVES_INCLUDES_DIR ${PROJECT_SOURCE_DIR}/includes)
+include_directories( ${Boost_INCLUDE_DIRS} ) 
+include_directories( ${PULSEWAVES_INCLUDES_DIR} )
+link_directories( ${PULSEWAVES_SOURCE_DIR}/src)
+add_executable(pulsewaves PulseWaves.cpp vlrClass.cpp main.cpp ../includes/PulseWaves.hpp ../includes/PulseWavesDefs.hpp ../includes/vlrClass.hpp)
+target_link_libraries(pulsewaves ${Boost_LIBRARY_DIR})
