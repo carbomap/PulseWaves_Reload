@@ -3,7 +3,7 @@
 //  PulseWaves_Reload
 //
 //  Created by Antoine Cottin on 01/12/2015.
-//  Copyright © 2015 Antoine Cottin. All rights reserved.
+//  Copyright © 2015 Carbomap. All rights reserved.
 //
 
 #ifndef PulseWaves_hpp
@@ -16,7 +16,7 @@
 #include <boost/lexical_cast.hpp>
 #include <string.h>
 #include "PulseWavesDefs.hpp"
-
+#include "vlrClass.hpp"
 
 
 

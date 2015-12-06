@@ -3,7 +3,7 @@
 //  PulseWaves_Reload
 //
 //  Created by Antoine Cottin on 01/12/2015.
-//  Copyright © 2015 Antoine Cottin. All rights reserved.
+//  Copyright © 2015 Carbomap. All rights reserved.
 //
 
 #include "../includes/PulseWaves.hpp"
@@ -199,7 +199,7 @@ void PulseWaves::readVLR()
     this->printSep();
     
     // Creating a map to hold the VLR header records
-    std::map<int, vlr_header_strc> vlrHeaderMap;
+    std::map<int, vlrHeader_strc> vlrHeaderMap;
     // for testing just now
     std::map<std::string, boost::variant<scanner_vlr_strc, pulseSampling_vlr_strc, lookUpTable_vlr_strc, lutRecord_vlr_strc, samplingRecord_strc> > vlrRecordMap ;
     

@@ -2,16 +2,17 @@
 //  vlrClass.hpp
 //  pulsewaves_reload
 //
-//  Created by Adele & Antoine Cottin  on 05/12/2015.
-//
+//  Created by Antoine Cottin on 01/12/2015.
+//  Copyright © 2015 Carbomap. All rights reserved.
 //
 
 #ifndef vlrClass_hpp
 #define vlrClass_hpp
 
 #include <stdio.h>
+#include <fstream>
 #include <boost/cstdint.hpp>
-#include "PulseWavesDefs_hpp"
+#include "PulseWavesDefs.hpp"
 
 
 class vlrHeaderClass
@@ -62,7 +63,7 @@ class vlrScannerClass : vlrHeaderClass
     float               maximalRange;
     boost::int8_t       description[PLS_DESCRIPTION_SIZE];
     
-    void readVLR(std::fstream &inFile);
+    virtual void readVLR(std::fstream);
     
 };
 

@@ -2,9 +2,8 @@
 //  PulseWavesDefs.hpp
 //  pulsewaves_reload
 //
-//  Created by Adele & Antoine Cottin  on 05/12/2015.
-//
-//
+//  Created by Antoine Cottin on 01/12/2015.
+//  Copyright © 2015 Carbomap. All rights reserved.//
 
 #ifndef PulseWavesDefs_hpp
 #define PulseWavesDefs_hpp
