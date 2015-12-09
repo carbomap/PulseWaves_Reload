@@ -27,7 +27,7 @@ private:
     boost::int8_t       description[PLS_DESCRIPTION_SIZE];
     
     
-    virtual void readVLR();
+    virtual void readVLR(std::fstream);
     
     
 public:
@@ -43,7 +43,7 @@ public:
 
 
 // The Scanner VLR descriptor - 100,001 <= Record ID < 100,255
-class vlrScannerClass : vlrHeaderClass
+class vlrScannerClass : public vlrHeaderClass
 {
     boost::uint32_t     size;
     boost::uint32_t     reserved;
