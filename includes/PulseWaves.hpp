@@ -217,6 +217,7 @@ class PulseWaves
 	std::string wvsFilePath_;       // String representing the fully qualified WVS file name path
     std::fstream* inPlsFile_;       // fstream pointer to the pls file
     plsHeaderClass* plsHeader_;     // Pointer to an instance of the PLS HEADER file
+    vlrHeaderClass* plsVlrArr_;     // pointer to an array of VLR objects
     
 	// Private methods for reading the file
     void printSep() const;

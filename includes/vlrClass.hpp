@@ -17,6 +17,7 @@
 #include "PulseWavesDefs.hpp"
 
 
+#pragma pack(push, r1, 1)
 class vlrHeaderClass
 {
     
@@ -40,7 +41,7 @@ public:
     {
         
         // when testing the VLR ID then at the end need to get back to the start
-        //U32 originCursorPos = inFile->tellg();
+        U32 originCursorPos = inFile->tellg();
         
         I8 tUserID[16];
         inFile->read((char *)&tUserID, sizeof(tUserID));
@@ -54,9 +55,9 @@ public:
         inFile->read((char *)&tDescription, sizeof(tDescription));
         
         // debug -> to mimic the read of the actual VLR - this line needs to be commented out
-        inFile->seekg(tRecLength, std::ios::cur);
+//        inFile->seekg(tRecLength, std::ios::cur);
         // uncomment this line once the full reader implemented
-        //inFile->seekg(originCursorPos, std::ios::beg);
+        inFile->seekg(originCursorPos, std::ios::beg);
         
         return tRecID;
         
@@ -74,9 +75,10 @@ private:
 
     
 };
-
+#pragma pack(pop, r1)
 
 //// The Scanner VLR descriptor - 100,001 <= Record ID < 100,255
+#pragma pack(push, 1)
 class vlrScannerClass : public vlrHeaderClass
 {
     
@@ -86,7 +88,7 @@ public:
     U32    reserved;
     I8     instrument[64];
     I8     serial[64];
-    F32    avelength;
+    F32    wavelength;
     F32    outgoingPulseWidth;
     U32    scanPattern;
     U32    numberOfMirrorFacets;
@@ -107,7 +109,7 @@ public:
     virtual void print() const;
     
 };
-
+#pragma pack(pop,1)
 
 
 #endif /* vlrClass_hpp */

@@ -63,7 +63,7 @@ PulseWaves::PulseWaves(string inFile)
 // Private methods for reading the file
 void PulseWaves::printSep() const
 {
-    std::cout << "##################################################" << std::endl;
+    std::cout << "########################################################" << std::endl;
 };
 
 
@@ -99,6 +99,18 @@ void PulseWaves::readVLR()
         {
             printSep();
             cout << "Scanner descriptor found..." << std::endl;
+            
+            vlrScannerClass* tempVlr = new vlrScannerClass;
+            
+            tempVlr->vlrHeaderClass::read(inPlsFile_);
+            tempVlr->vlrScannerClass::read(inPlsFile_);
+            
+            tempVlr->vlrHeaderClass::print();
+            printSep();
+            tempVlr->vlrScannerClass::print();
+            
+            vlrHeaderArr[i] = *tempVlr;
+            
         }
         else if (200001 >= recID && recID < 200255)
         {
@@ -115,42 +127,11 @@ void PulseWaves::readVLR()
             printSep();
             cout << "Generic VLR descriptor found..." << std::endl;
         }
-        // read the class
         
-        // assigned the instance to the object array
-        //vlrHeaderArr[i] =
+        
         
     }
     
-//    this->printSep();
-//    
-//    // Creating a map to hold the VLR header records
-//    std::map<int, vlrHeader_strc> vlrHeaderMap;
-//    // for testing just now
-//    std::map<std::string, boost::variant<scanner_vlr_strc, pulseSampling_vlr_strc, lookUpTable_vlr_strc, lutRecord_vlr_strc, samplingRecord_strc> > vlrRecordMap ;
-//    
-//    // instantiation of the fstream class object
-//    std::fstream plsFile;
-//    plsFile.open(plsFilePath_.c_str(), std::ios::in | std::ios::binary);
-//    
-//    // pointing the cursor at the beginning of the VLR Block
-//    plsFile.seekg(plsHeader_->headerSize, ios::beg);
-//
-//    vlr_header_strc vlsHeader;
-//    
-//    // reading the VLR
-//    for (int i = 0; i < plsHeader_->nVLR; i++) {
-//        plsFile.read((char *)&vlsHeader, sizeof(vlsHeader));
-//        
-//        vlrHeaderMap.insert ( std::pair<int,vlr_header_strc>(i,vlsHeader) );
-//        
-//        // for the time being as no actual VLR record is read, just jump to the next vlr Header
-//        plsFile.seekg(vlsHeader.recordLengthAfterHeader, ios::cur);
-//        
-//    }
-//    
-//    // Closing the file pointer
-//    plsFile.close();
     
 };
 
