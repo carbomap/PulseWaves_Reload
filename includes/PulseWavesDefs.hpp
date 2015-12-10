@@ -31,5 +31,15 @@
 #define PLS_TABLE_INTENSITY_CORRECTION                    1
 #define PLS_TABLE_RANGE_CORRECTION                        2
 
+typedef boost::int8_t       I8;
+typedef boost::int16_t      I16;
+typedef boost::int32_t      I32;
+typedef boost::int64_t      I64;
+typedef boost::uint8_t      U8;
+typedef boost::uint16_t     U16;
+typedef boost::uint32_t     U32;
+typedef boost::uint64_t     U64;
+typedef float               F32;
+typedef double              F64;
 
 #endif /* PulseWavesDefs_hpp */
