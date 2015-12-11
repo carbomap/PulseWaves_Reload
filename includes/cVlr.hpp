@@ -1,5 +1,5 @@
 //
-//  vlrClass.hpp
+//  cVlr.hpp
 //  pulsewaves_reload
 //
 //  Created by Antoine Cottin on 01/12/2015.
@@ -18,7 +18,7 @@
 
 
 #pragma pack(push, r1, 1)
-class vlrHeaderClass
+class cVlrHeader
 {
     
 public:
@@ -32,8 +32,8 @@ public:
     
 //    virtual void readVLR(std::fstream&);
     
-    vlrHeaderClass();
-    ~vlrHeaderClass(){};
+    cVlrHeader();
+    ~cVlrHeader(){};
 
     
     // this method will test the type of VLR before
@@ -79,7 +79,7 @@ private:
 
 //// The Scanner VLR descriptor - 100,001 <= Record ID < 100,255
 #pragma pack(push, 1)
-class vlrScannerClass : public vlrHeaderClass
+class cVlrScanner : public cVlrHeader
 {
     
 public:
@@ -92,24 +92,78 @@ public:
     F32    outgoingPulseWidth;
     U32    scanPattern;
     U32    numberOfMirrorFacets;
-    I32    scanFrequency;
-    I32    scanMinAngle;
-    I32    scanMaxAngle;
-    I32    pulseFrequency;
+    F32    scanFrequency;
+    F32    scanMinAngle;
+    F32    scanMaxAngle;
+    F32    pulseFrequency;
     F32    beamDiameterAtExit;
     F32    beamDivergeance;
     F32    minimalRange;
     F32    maximalRange;
     I8     description[PLS_DESCRIPTION_SIZE];
     
-    vlrScannerClass();
-    ~vlrScannerClass(){};
+    cVlrScanner();
+    ~cVlrScanner(){};
     
     virtual void read(std::fstream*);
     virtual void print() const;
     
 };
-#pragma pack(pop,1)
+#pragma pack(pop)
+
+
+// The Pulse Sampling VLR descriptor - 200,001 <= Record ID < 200,255
+#pragma pack(push, 1)
+class cVlrPulseSampling : public cVlrHeader
+{
+    
+public:
+
+    U32     size;
+    U32     reserved;
+    U32     opticalCenterToAnchorPoint;
+    U16     numberOfExtraWaveBytes;
+    U16     numberOfSamplings;
+    F32     sampleUnit;
+    U32     compression;
+    U32     scannerIndex;
+    I8      description[PLS_DESCRIPTION_SIZE];
+
+cVlrPulseSampling();
+~cVlrPulseSampling();
+
+virtual void read(std::fstream*);
+virtual void print() const;
+
+};
+#pragma pack(pop)
+
+
+
+// The Look-Up Table VLR descriptor - 300,001 <= Record ID < 300,255
+#pragma pack(push, r1, 1)
+class cLutHeader{
+    boost::uint32_t     size;
+    boost::uint32_t     reserved;
+    boost::uint32_t     numberOfTable;
+    boost::int8_t       description[PLS_DESCRIPTION_SIZE];
+};
+#pragma pack(pop, r1)
+//
+//
+//// The Look-Up Table Record VLR descriptor
+//#pragma pack(push, r1, 1)
+//class cLutRecord : public vlr
+//    boost::uint32_t     size;
+//    boost::uint32_t     reserved;
+//    boost::uint32_t     numberOfEntries;
+//    boost::uint16_t     unitOfMeasurement;
+//    boost::uint8_t      dataType;
+//    boost::uint8_t      options;
+//    boost::uint32_t     compression;
+//    boost::int8_t       description[PLS_DESCRIPTION_SIZE];
+//};
+//#pragma pack(pop, r1)
 
 
 #endif /* vlrClass_hpp */

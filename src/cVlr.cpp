@@ -1,36 +1,36 @@
 //
-//  vlrClass.cpp
+//  cVlr.cpp
 //  pulsewaves_reload
 //
 //  Created by Antoine Cottin on 01/12/2015.
 //  Copyright © 2015 Carbomap. All rights reserved.
 //
 
-#include "../includes/vlrClass.hpp"
+#include "../includes/cVlr.hpp"
 #include <boost/lexical_cast.hpp>
 
 
-vlrHeaderClass::vlrHeaderClass()
+cVlrHeader::cVlrHeader()
 {
     
 }
 
 
 
-void vlrHeaderClass::read(std::fstream* inFile)
+void cVlrHeader::read(std::fstream* inFile)
 {
-
+    
     inFile->read((char *)&userID, sizeof(userID));
     inFile->read((char *)&recordID, sizeof(recordID));
     inFile->read((char *)&reserved, sizeof(reserved));
     inFile->read((char *)&recordLengthAfterHeader, sizeof(recordLengthAfterHeader));
     inFile->read((char *)&description, sizeof(description));
-
+    
 }
 
 
 
-void vlrHeaderClass::print() const
+void cVlrHeader::print() const
 {
     
     std::cout << "User ID: " << boost::lexical_cast<std::string>(userID) << std::endl;
@@ -41,13 +41,13 @@ void vlrHeaderClass::print() const
 }
 
 
-vlrScannerClass::vlrScannerClass()
+cVlrScanner::cVlrScanner()
 {
     
 }
 
 
-void vlrScannerClass::read(std::fstream* inFile)
+void cVlrScanner::read(std::fstream* inFile)
 {
     
     inFile->read((char *)&size, sizeof(size));
@@ -67,17 +67,40 @@ void vlrScannerClass::read(std::fstream* inFile)
     inFile->read((char *)&minimalRange, sizeof(minimalRange));
     inFile->read((char *)&maximalRange, sizeof(maximalRange));
     inFile->read((char *)&description, sizeof(description));
-    
+
 }
 
-void vlrScannerClass::print() const
+void cVlrScanner::print() const
 {
     
     std::cout << "System identifier: " << boost::lexical_cast<std::string>(instrument) << std::endl;
     std::cout << "System serial: " << boost::lexical_cast<std::string>(serial) << std::endl;
     std::cout << "System wavelength: " << wavelength << " nm" << std::endl;
     std::cout << "System outgoing pulse width: " << outgoingPulseWidth << " nm" << std::endl;
-    std::cout << "System scan pattern: " << scanPattern << std::endl;
+
+    switch (scanPattern)
+    {
+        case 0: {
+            std::cout << "System scan pattern: Undefined" << std::endl;
+            break;
+        }
+        case 1:
+        {
+            std::cout << "System scan pattern: Oscillating" << std::endl;
+            break;
+        }
+        case 2:
+        {
+            std::cout << "System scan pattern: Line" << std::endl;
+            break;
+        }
+        case 3:
+        {
+            std::cout << "System scan pattern: Conic" << std::endl;
+            break;
+        }
+    }
+
     std::cout << "System number of mirror facets: " << numberOfMirrorFacets << std::endl;
     std::cout << "System scan frequency: " << scanFrequency << " hz" << std::endl;
     std::cout << "System minimum scan angle: " << scanMinAngle << " deg" << std::endl;
@@ -88,5 +111,26 @@ void vlrScannerClass::print() const
     std::cout << "System minimum range: " << minimalRange << " m" << std::endl;
     std::cout << "System maximum range: " << maximalRange << " m" << std::endl;
     std::cout << "System description (id any): " << description << std::endl;
+    
+}
+
+
+
+cVlrPulseSampling::cVlrPulseSampling()
+{
+    
+}
+
+
+
+void cVlrPulseSampling::read(std::fstream* inFile)
+{
+    
+}
+
+
+
+void cVlrPulseSampling::print() const
+{
     
 }

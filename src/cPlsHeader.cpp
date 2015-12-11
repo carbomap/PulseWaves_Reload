@@ -1,23 +1,23 @@
 //
-//  plsHeaderClass.cpp
+//  cPlsHeader.cpp
 //  Project
 //
 //  Created by Antoine Cottin on 09/12/2015.
 //
 //
 
-#include "../includes/plsHeaderClass.hpp"
+#include "../includes/cPlsHeader.hpp"
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
 #include <boost/lexical_cast.hpp>
 
-plsHeaderClass::plsHeaderClass()
+cPlsHeader::cPlsHeader()
 {
     
 }
 
-void plsHeaderClass::read(std::fstream* plsInFile)
+void cPlsHeader::read(std::fstream* plsInFile)
 {
     
     // reading the file into memory
@@ -66,7 +66,7 @@ void plsHeaderClass::read(std::fstream* plsInFile)
 
 
 
-void plsHeaderClass::print() const
+void cPlsHeader::print() const
 {
     
 //    this->printSep();
@@ -128,38 +128,8 @@ void plsHeaderClass::print() const
     std::cout << "" << std::endl;
     
 }
-//
-//
-//
-//
-//string plsHeaderClass::getSystemID() const {return boost::lexical_cast<std::string>(*systemID);}
-//string plsHeaderClass::getSoftwareID() const {return boost::lexical_cast<std::string>(*generatingSoftware);}
-//boost::uint16_t plsHeaderClass::getDay() const {return day;}
-//boost::uint16_t plsHeaderClass::getYear() const { return year;}
-//boost::uint8_t plsHeaderClass::getVersionMajor() const {return versionMajor;}
-//boost::uint8_t plsHeaderClass::getVersionMinor()const{return versionMinor;}
-//boost::uint16_t plsHeaderClass::getHeaderSize()const {return headerSize;}
-//boost::uint64_t plsHeaderClass::getOffsetToPulses()const{return dataOffet;}
-//boost::uint64_t plsHeaderClass::getNumbOfPulses()const{return nPulses;}
-//boost::uint32_t plsHeaderClass::getPulseFormat()const{return pulseFormat;}
-//boost::uint32_t plsHeaderClass::getPulseAttrib()const{return pulseAttributes;}
-//boost::uint32_t plsHeaderClass::getPulseSize()const{return pulseSize;}
-//boost::uint32_t plsHeaderClass::getPulseCompress()const{return pulseCompression;}
-//boost::uint32_t plsHeaderClass::getNumbOfVLR()const{return nVLR;}
-//boost::int32_t plsHeaderClass::getNumbOfAVLR()const{return nAVLR;}
-//double plsHeaderClass::getTimeScale()const{return scaleT;}
-//double plsHeaderClass::getTimeOffset()const{return offsetT;}
-//boost::uint64_t plsHeaderClass::getTimeMin()const{return minT;}
-//boost::uint64_t plsHeaderClass::getTMax()const{return maxT;}
-//double plsHeaderClass::getXScale()const{return scaleX;}
-//double plsHeaderClass::getYScale()const{return scaleY;}
-//double plsHeaderClass::getZScale()const{return scaleZ;}
-//double plsHeaderClass::getXOffset()const{return offsetX;}
-//double plsHeaderClass::getYOffset()const{return offsetY;}
-//double plsHeaderClass::getZOffset()const{return offsetZ;}
-//double plsHeaderClass::getXMin()const{return minX;}
-//double plsHeaderClass::getXMax()const{return maxX;}
-//double plsHeaderClass::getYMin()const{return minY;}
-//double plsHeaderClass::getYMax()const{return maxY;}
-//double plsHeaderClass::getZMin()const{return minZ;}
-//double plsHeaderClass::getZMax()const{return maxZ;}
+
+void cPlsHeader::write() const
+{
+    
+}

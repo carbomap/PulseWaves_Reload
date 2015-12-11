@@ -16,8 +16,9 @@
 #include <boost/lexical_cast.hpp>
 #include <string.h>
 #include "PulseWavesDefs.hpp"
-#include "vlrClass.hpp"
-#include "plsHeaderClass.hpp"
+#include "cVlr.hpp"
+#include "cPlsHeader.hpp"
+#include "cGeoKey.hpp"
 
 
 //#pragma pack(push, r1, 1)
@@ -73,22 +74,8 @@
 //    boost::uint8_t      reserve[44];
 //};
 //#pragma pack(pop, r1)
-//
-//
-//
-//
-//
-////#pragma pack(push, r1, 1)
-////struct vlr_header_strc{
-////    boost::int8_t       userID[PLS_USER_ID_SIZE];
-////    boost::uint32_t     recordID;
-////    boost::uint32_t     reserved;
-////    boost::int64_t      recordLengthAfterHeader;
-////    boost::int8_t       description[PLS_DESCRIPTION_SIZE];
-////};
-////#pragma pack(pop, r1)
-//
-//
+
+
 //struct pls_pulserec_strc{
 //	boost::int64_t      gpsTime; 		//        ; GPS time
 //    boost::int64_t      waveOffset; 	//        ; Bytes offset to wave record
@@ -115,46 +102,7 @@
 //    boost::int8_t       description[PLS_DESCRIPTION_SIZE];
 //};
 //#pragma pack(pop, r1)
-//
-//
-//// The Scanner VLR descriptor - 100,001 <= Record ID < 100,255
-//#pragma pack(push, r1, 1)
-//struct scanner_vlr_strc{
-//    boost::uint32_t     size;
-//    boost::uint32_t     reserved;
-//    boost::int8_t       instrument[64];
-//    boost::int8_t       serial[64];
-//    float               avelength;
-//    float               outgoingPulseWidth;
-//    boost::uint32_t     scanPattern;
-//    boost::uint32_t     numberOfMirrorFacets;
-//    boost::int32_t      scanFrequency;
-//    boost::int32_t      scanMinAngle;
-//    boost::int32_t      scanMaxAngle;
-//    boost::int32_t      pulseFrequency;
-//    float               beamDiameterAtExit;
-//    float               beamDivergeance;
-//    float               minimalRange;
-//    float               maximalRange;
-//    boost::int8_t       description[PLS_DESCRIPTION_SIZE];
-//};
-//#pragma pack(pop, r1)
-//
-//
-//// The Pulse Sampling VLR descriptor - 200,001 <= Record ID < 200,255
-//#pragma pack(push, r1, 1)
-//struct pulseSampling_vlr_strc{
-//    boost::uint32_t     size;
-//    boost::uint32_t     reserved;
-//    boost::int32_t      opticalCenterToAnchorPoint;
-//    boost::uint16_t     numberOfExtraWaveBytes;
-//    boost::uint16_t     numberOfSamplings;
-//    float               sampleUnit;
-//    boost::uint32_t     compression;
-//    boost::uint32_t     scannerIndex;
-//    boost::int8_t       description[PLS_DESCRIPTION_SIZE];
-//};
-//#pragma pack(pop, r1)
+
 //
 //
 //// The Look-Up Table VLR descriptor - 300,001 <= Record ID < 300,255
@@ -216,8 +164,9 @@ class PulseWaves
     std::string plsFilePath_;       // String representing the fully qualified PLS file name path
 	std::string wvsFilePath_;       // String representing the fully qualified WVS file name path
     std::fstream* inPlsFile_;       // fstream pointer to the pls file
-    plsHeaderClass* plsHeader_;     // Pointer to an instance of the PLS HEADER file
-    vlrHeaderClass* plsVlrArr_;     // pointer to an array of VLR objects
+    cPlsHeader* plsHeader_;     // Pointer to an instance of the PLS HEADER file
+    cVlrHeader* plsVlrArr_;     // pointer to an array of VLR objects
+    cGeoKey* cGeoKeyArr_;       // Pointer to an array of GeoKey object
     
 	// Private methods for reading the file
     void printSep() const;

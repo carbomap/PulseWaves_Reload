@@ -9,6 +9,8 @@
 #define PulseWavesDefs_hpp
 
 #include <stdio.h>
+#include <boost/cstdint.hpp>
+
 
 #define PLS_USER_ID_SIZE                                  16
 #define PLS_DESCRIPTION_SIZE                              64

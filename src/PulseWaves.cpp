@@ -11,7 +11,8 @@
 #include <fstream>
 #include <boost/lexical_cast.hpp>
 #include <boost/variant.hpp>
-//#include <map>
+#include "../includes/cGeoKey.hpp"
+
 
 using namespace std;
 
@@ -72,7 +73,7 @@ void PulseWaves::readHeader()
 {
 
 	// getting header structure
-	plsHeaderClass* plsHeader = new plsHeaderClass;
+	cPlsHeader* plsHeader = new cPlsHeader;
     plsHeader->read(inPlsFile_);
     plsHeader->print();
 
@@ -81,33 +82,67 @@ void PulseWaves::readHeader()
 };
 
 
-
+// Method that reads the VLR and store them into an array
+// Note that for the moment there is a little bug on the storage as
+// the GeoKeyHeader is not properly stored !!!
+// This needs some fixing.
 void PulseWaves::readVLR()
 {
 
-    vlrHeaderClass* vlrHeaderArr = new vlrHeaderClass[plsHeader_->nVLR];
+    cVlrHeader* vlrHeaderArr = new cVlrHeader[plsHeader_->nVLR];
     
     // reading the VLR
     for (int i = 0; i < plsHeader_->nVLR; i++)
     {
         // getting the VLR ID record number
-        U32 recID = vlrHeaderClass::whichVLR(inPlsFile_);
+        U32 recID = cVlrHeader::whichVLR(inPlsFile_);
         
-        cout << "Record ID:" << recID << std::endl;
+//        cout << "Record ID:" << recID << std::endl;
+        
+        
         // instantiate the correct VLR class
-        if (100001 >= recID && recID < 100255)
+        if (recID == 34735)
+        {
+            
+            cVlrHeader* tempVlr = new cVlrHeader;
+            tempVlr->cVlrHeader::read(inPlsFile_);
+            vlrHeaderArr[i] = *tempVlr;
+            
+            printSep();
+            cout << "Geokey descriptor found..." << std::endl;
+            
+            cGeoKeyHeader tempGKey;
+            tempGKey.read(inPlsFile_);
+            // putting GeoKey header in the vlr array
+//            vlrHeaderArr[i] = tempGKey;
+            
+            // creating another array of Geokey
+            cGeoKey* cGeoKeyArr = new cGeoKey[tempGKey.gKeyNumberOfKeys+1];
+//            cGeoKeyArr[0] = tempGKey;
+            
+            for (int j = 1; j < tempGKey.gKeyNumberOfKeys+1; j++) {
+                cGeoKey tempGKey;
+                tempGKey.read(inPlsFile_);
+                // putting GeoKey header in the vlr array
+                cGeoKeyArr[j] = tempGKey;
+            }
+            
+            cGeoKeyArr_ = cGeoKeyArr;
+            
+        }
+        else if (recID >= 100001 && recID < 100255)
         {
             printSep();
             cout << "Scanner descriptor found..." << std::endl;
             
-            vlrScannerClass* tempVlr = new vlrScannerClass;
+            cVlrScanner* tempVlr = new cVlrScanner;
             
-            tempVlr->vlrHeaderClass::read(inPlsFile_);
-            tempVlr->vlrScannerClass::read(inPlsFile_);
+            tempVlr->cVlrHeader::read(inPlsFile_);
+            tempVlr->cVlrScanner::read(inPlsFile_);
             
-            tempVlr->vlrHeaderClass::print();
+            tempVlr->cVlrHeader::print();
             printSep();
-            tempVlr->vlrScannerClass::print();
+            tempVlr->cVlrScanner::print();
             
             vlrHeaderArr[i] = *tempVlr;
             
@@ -116,22 +151,36 @@ void PulseWaves::readVLR()
         {
             printSep();
             cout << "Pulse sampling descriptor found..." << std::endl;
+            
+            cVlrHeader* tempVlr = new cVlrHeader;
+            tempVlr->cVlrHeader::read(inPlsFile_);
+            inPlsFile_->seekg(tempVlr->recordLengthAfterHeader, std::ios::cur);
+            
         }
-        else if (200001 <= recID && recID < 200255)
+        else if (300001 <= recID && recID < 300255)
         {
             printSep();
-            cout << "Pulse sampling descriptor found..." << std::endl;
+            cout << "Lookup Table descriptor found..." << std::endl;
+            
+            cVlrHeader* tempVlr = new cVlrHeader;
+            tempVlr->cVlrHeader::read(inPlsFile_);
+            inPlsFile_->seekg(tempVlr->recordLengthAfterHeader, std::ios::cur);
         }
         else
         {
             printSep();
             cout << "Generic VLR descriptor found..." << std::endl;
+            
+            cVlrHeader* tempVlr = new cVlrHeader;
+            tempVlr->cVlrHeader::read(inPlsFile_);
+            inPlsFile_->seekg(tempVlr->recordLengthAfterHeader, std::ios::cur);
         }
         
         
         
     }
     
+    plsVlrArr_  = vlrHeaderArr;
     
 };
 
