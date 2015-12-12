@@ -112,9 +112,46 @@ public:
 #pragma pack(pop)
 
 
+
+// The Sampling Record
+#pragma pack(push, 1)
+class cVlrSamplingRecord
+{
+    
+public:
+    
+    U32     size;
+    U32     reserved;
+    U8      type;
+    U8      channel;
+    U8      notUsed;
+    U8      bitsForDurationFromAnchor;
+    F32     scaleForDurationFromAnchor;
+    F32     offsetForDurationFromAnchor;
+    U8      bitsForNumberOfSegments;
+    U8      bitsForNumberOfSamples;
+    U16     numberOfSegments;
+    U32     numberOfSamples;
+    U16     bitsPerSample;
+    U16     lutIndex;
+    F32     sampleUnits;
+    U32     compression;
+    I8      description[PLS_DESCRIPTION_SIZE];
+    
+    cVlrSamplingRecord();
+    ~cVlrSamplingRecord(){};
+    
+    virtual void read(std::fstream*);
+    virtual void print() const;
+    
+};
+#pragma pack(pop)
+
+
+
 // The Pulse Sampling VLR descriptor - 200,001 <= Record ID < 200,255
 #pragma pack(push, 1)
-class cVlrPulseSampling : public cVlrHeader
+class cVlrPulseSampling : public cVlrHeader, public cVlrSamplingRecord
 {
     
 public:
@@ -130,10 +167,20 @@ public:
     I8      description[PLS_DESCRIPTION_SIZE];
 
 cVlrPulseSampling();
-~cVlrPulseSampling();
+~cVlrPulseSampling()
+    {
+        samplingRecordArr_ = 0;
+    };
 
 virtual void read(std::fstream*);
 virtual void print() const;
+    
+void read_SamplingRecords(std::fstream*);
+    
+private:
+    
+    cVlrSamplingRecord* samplingRecordArr_;
+    
 
 };
 #pragma pack(pop)
@@ -141,29 +188,53 @@ virtual void print() const;
 
 
 // The Look-Up Table VLR descriptor - 300,001 <= Record ID < 300,255
-#pragma pack(push, r1, 1)
-class cLutHeader{
-    boost::uint32_t     size;
-    boost::uint32_t     reserved;
-    boost::uint32_t     numberOfTable;
-    boost::int8_t       description[PLS_DESCRIPTION_SIZE];
+#pragma pack(push, 1)
+class cLutHeader : public cVlrHeader
+{
+    
+public:
+    
+    U32     size;
+    U32     reserved;
+    I32     numberOfTable;
+    I8      description[PLS_DESCRIPTION_SIZE];
+    
+    cLutHeader();
+    ~cLutHeader(){};
+    
+    virtual void read(std::fstream*);
+    virtual void print() const;
+    
+    
 };
-#pragma pack(pop, r1)
-//
-//
-//// The Look-Up Table Record VLR descriptor
-//#pragma pack(push, r1, 1)
-//class cLutRecord : public vlr
-//    boost::uint32_t     size;
-//    boost::uint32_t     reserved;
-//    boost::uint32_t     numberOfEntries;
-//    boost::uint16_t     unitOfMeasurement;
-//    boost::uint8_t      dataType;
-//    boost::uint8_t      options;
-//    boost::uint32_t     compression;
-//    boost::int8_t       description[PLS_DESCRIPTION_SIZE];
-//};
-//#pragma pack(pop, r1)
+#pragma pack(pop)
+
+
+
+// The Look-Up Table Record VLR descriptor
+#pragma pack(push, 1)
+class cLutRecord : public cLutHeader
+{
+    
+public:
+
+    U32     size;
+    U32     reserved;
+    U32     numberOfEntries;
+    U16     unitOfMeasurement;
+    U8      dataType;
+    U8      options;
+    U32     compression;
+    I8      description[PLS_DESCRIPTION_SIZE];
+    
+    cLutRecord();
+    ~cLutRecord(){};
+    
+    virtual void read(std::fstream*);
+    virtual void print() const;
+    
+};
+#pragma pack(pop)
 
 
 #endif /* vlrClass_hpp */

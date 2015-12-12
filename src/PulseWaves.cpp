@@ -12,6 +12,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/variant.hpp>
 #include "../includes/cGeoKey.hpp"
+#include "../includes/cVlr.hpp"
 
 
 using namespace std;
@@ -97,8 +98,10 @@ void PulseWaves::readVLR()
         // getting the VLR ID record number
         U32 recID = cVlrHeader::whichVLR(inPlsFile_);
         
-//        cout << "Record ID:" << recID << std::endl;
         
+        cout << "" << recID << std::endl;
+        cout << "Record ID:" << recID << std::endl;
+        cout << "" << recID << std::endl;
         
         // instantiate the correct VLR class
         if (recID == 34735)
@@ -123,6 +126,7 @@ void PulseWaves::readVLR()
             for (int j = 1; j < tempGKey.gKeyNumberOfKeys+1; j++) {
                 cGeoKey tempGKey;
                 tempGKey.read(inPlsFile_);
+                tempGKey.print();
                 // putting GeoKey header in the vlr array
                 cGeoKeyArr[j] = tempGKey;
             }
@@ -147,17 +151,36 @@ void PulseWaves::readVLR()
             vlrHeaderArr[i] = *tempVlr;
             
         }
-        else if (200001 >= recID && recID < 200255)
+        else if (recID >= 200001  && recID < 200255)
         {
             printSep();
             cout << "Pulse sampling descriptor found..." << std::endl;
             
-            cVlrHeader* tempVlr = new cVlrHeader;
+            cVlrPulseSampling* tempVlr = new cVlrPulseSampling;
             tempVlr->cVlrHeader::read(inPlsFile_);
-            inPlsFile_->seekg(tempVlr->recordLengthAfterHeader, std::ios::cur);
+            tempVlr->cVlrHeader::print();
+            printSep();
+            
+            tempVlr->cVlrPulseSampling::read(inPlsFile_);
+            tempVlr->cVlrPulseSampling::print();
+            printSep();
+            
+            tempVlr->cVlrPulseSampling::read_SamplingRecords(inPlsFile_);
+            
+//            cVlrSamplingRecord* samplingRecordArr_ = new cVlrSamplingRecord[tempVlr->cVlrPulseSampling::numberOfSamples];
+//            
+//            U16 numberOfSampling = tempVlr->numberOfSamplings;
+//            for (U16 w = 0; w < numberOfSampling; w++) {
+//                
+//                    cVlrSamplingRecord* tempSamplingRecord = new cVlrSamplingRecord;
+//                    tempSamplingRecord->read(inPlsFile_);
+//                    tempSamplingRecord->print();
+//                    printSep();
+//                    samplingRecordArr_[w] = *tempSamplingRecord;
+//                }
             
         }
-        else if (300001 <= recID && recID < 300255)
+        else if (recID >= 300001 && recID < 300255)
         {
             printSep();
             cout << "Lookup Table descriptor found..." << std::endl;
