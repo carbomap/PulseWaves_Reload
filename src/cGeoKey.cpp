@@ -30,6 +30,10 @@ void cGeoKeyHeader::read(std::fstream* inFile)
 
 void cGeoKeyHeader::print() const
 {
+    std::cout << "geoKey directory version: " << gKeyDirectoryVersion << std::endl;
+    std::cout << "geoKey revision: " << gKeyRevision << std::endl;
+    std::cout << "geoKey minor revision: " << gKeyMinorRevision << std::endl;
+    std::cout << "geoKey number of keys: " << gKeyNumberOfKeys << std::endl;
     
 };
 
@@ -56,4 +60,8 @@ void cGeoKey::read(std::fstream* inFile)
 void cGeoKey::print() const
 {
     
+    std::cout << "geoKey identity: " << gKeyID << std::endl;
+    std::cout << "geoKey Tiff tag location: " << gKeyTiffTagLocation << std::endl;
+    std::cout << "geoKey count: " << gKeyCount << std::endl;
+    std::cout << "geoKey value offset: " << gKeyValueOffset << std::endl;
 }

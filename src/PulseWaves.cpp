@@ -15,12 +15,9 @@
 #include "../includes/cVlr.hpp"
 
 
-using namespace std;
-
-
 //-----------------------------------------------------------
 
-PulseWaves::PulseWaves(string inFile)
+PulseWaves::PulseWaves(std::string inFile)
 {
 	
     
@@ -98,24 +95,26 @@ void PulseWaves::readVLR()
         // getting the VLR ID record number
         U32 recID = cVlrHeader::whichVLR(inPlsFile_);
         
-        
-        cout << "" << recID << std::endl;
-        cout << "Record ID:" << recID << std::endl;
-        cout << "" << recID << std::endl;
-        
         // instantiate the correct VLR class
         if (recID == 34735)
         {
             
             cVlrHeader* tempVlr = new cVlrHeader;
             tempVlr->cVlrHeader::read(inPlsFile_);
+            
+            printSep();
+            tempVlr->cVlrHeader::print();
+            
             vlrHeaderArr[i] = *tempVlr;
             
             printSep();
-            cout << "Geokey descriptor found..." << std::endl;
+            std::cout << "GeoKeyDirectoryTag Record found..." << std::endl;
             
             cGeoKeyHeader tempGKey;
             tempGKey.read(inPlsFile_);
+            tempGKey.print();
+            printSep();
+            
             // putting GeoKey header in the vlr array
 //            vlrHeaderArr[i] = tempGKey;
             
@@ -124,9 +123,12 @@ void PulseWaves::readVLR()
 //            cGeoKeyArr[0] = tempGKey;
             
             for (int j = 1; j < tempGKey.gKeyNumberOfKeys+1; j++) {
+                std::cout << "GeoKey " << j << " of " << tempGKey.gKeyNumberOfKeys << std::endl;
+                
                 cGeoKey tempGKey;
                 tempGKey.read(inPlsFile_);
                 tempGKey.print();
+                printSep();
                 // putting GeoKey header in the vlr array
                 cGeoKeyArr[j] = tempGKey;
             }
@@ -134,10 +136,52 @@ void PulseWaves::readVLR()
             cGeoKeyArr_ = cGeoKeyArr;
             
         }
+        else if (recID == 34736)
+        {
+            cVlrHeader* tempVlr = new cVlrHeader;
+            tempVlr->cVlrHeader::read(inPlsFile_);
+            
+            tempVlr->cVlrHeader::print();
+            
+            vlrHeaderArr[i] = *tempVlr;
+            
+            printSep();
+            std::cout << "GeoDoubleParamsTag Record found..." << std::endl;
+            
+            F64 tempArr[tempVlr->cVlrHeader::recordLengthAfterHeader / 8];
+//            boost::array<F64,3> tempArr;
+            inPlsFile_->read((char *)&tempArr, sizeof(tempArr));
+            for (int z =0; z < tempVlr->cVlrHeader::recordLengthAfterHeader / 8; z++) {
+                std::cout << tempArr[z] << ", ";
+                
+            }
+            std::cout << "" << std::endl;
+            printSep();
+            
+        }
+        else if (recID == 34737)
+        {
+            cVlrHeader* tempVlr = new cVlrHeader;
+            tempVlr->cVlrHeader::read(inPlsFile_);
+            
+            tempVlr->cVlrHeader::print();
+            printSep();
+
+            std::cout << "GeoAsciiParamsTag Record found..." << std::endl;
+            
+            const int length = tempVlr->cVlrHeader::recordLengthAfterHeader;
+            U8 tempArr[length];
+//            boost::array<I8,23> tempArr;
+            inPlsFile_->read((char *)&tempArr, sizeof(tempArr));
+            std::cout << tempArr << std::endl;
+            
+            
+        }
         else if (recID >= 100001 && recID < 100255)
         {
+            
             printSep();
-            cout << "Scanner descriptor found..." << std::endl;
+            std::cout << "Scanner descriptor found..." << std::endl;
             
             cVlrScanner* tempVlr = new cVlrScanner;
             
@@ -153,8 +197,9 @@ void PulseWaves::readVLR()
         }
         else if (recID >= 200001  && recID < 200255)
         {
+            
             printSep();
-            cout << "Pulse sampling descriptor found..." << std::endl;
+            std::cout << "Pulse sampling descriptor found..." << std::endl;
             
             cVlrPulseSampling* tempVlr = new cVlrPulseSampling;
             tempVlr->cVlrHeader::read(inPlsFile_);
@@ -167,23 +212,11 @@ void PulseWaves::readVLR()
             
             tempVlr->cVlrPulseSampling::read_SamplingRecords(inPlsFile_);
             
-//            cVlrSamplingRecord* samplingRecordArr_ = new cVlrSamplingRecord[tempVlr->cVlrPulseSampling::numberOfSamples];
-//            
-//            U16 numberOfSampling = tempVlr->numberOfSamplings;
-//            for (U16 w = 0; w < numberOfSampling; w++) {
-//                
-//                    cVlrSamplingRecord* tempSamplingRecord = new cVlrSamplingRecord;
-//                    tempSamplingRecord->read(inPlsFile_);
-//                    tempSamplingRecord->print();
-//                    printSep();
-//                    samplingRecordArr_[w] = *tempSamplingRecord;
-//                }
-            
         }
         else if (recID >= 300001 && recID < 300255)
         {
             printSep();
-            cout << "Lookup Table descriptor found..." << std::endl;
+            std::cout << "Lookup Table descriptor found..." << std::endl;
             
             cVlrHeader* tempVlr = new cVlrHeader;
             tempVlr->cVlrHeader::read(inPlsFile_);
@@ -192,7 +225,8 @@ void PulseWaves::readVLR()
         else
         {
             printSep();
-            cout << "Generic VLR descriptor found..." << std::endl;
+            std::cout << "Generic VLR descriptor found..." << std::endl;
+            std::cout << "VLR #" << recID << std::endl;
             
             cVlrHeader* tempVlr = new cVlrHeader;
             tempVlr->cVlrHeader::read(inPlsFile_);

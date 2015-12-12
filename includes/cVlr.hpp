@@ -17,7 +17,7 @@
 #include "PulseWavesDefs.hpp"
 
 
-#pragma pack(push, r1, 1)
+#pragma pack(push,1)
 class cVlrHeader
 {
     
@@ -75,7 +75,7 @@ private:
 
     
 };
-#pragma pack(pop, r1)
+#pragma pack(pop)
 
 //// The Scanner VLR descriptor - 100,001 <= Record ID < 100,255
 #pragma pack(push, 1)

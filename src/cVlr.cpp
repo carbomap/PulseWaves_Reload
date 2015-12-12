@@ -239,6 +239,7 @@ void cVlrPulseSampling::read_SamplingRecords(std::fstream* inFile)
         cVlrSamplingRecord* tempSamplingRecord = new cVlrSamplingRecord;
         tempSamplingRecord->read(inFile);
         tempSamplingRecord->print();
+        std::cout << "########################################################" << std::endl;
 
         samplingRecordArr_[w] = *tempSamplingRecord;
     }
