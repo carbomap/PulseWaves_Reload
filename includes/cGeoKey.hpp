@@ -22,10 +22,10 @@ class cGeoKeyHeader : public cVlrHeader
     
 public:
     
-    U16     gKeyDirectoryVersion;
-    U16     gKeyRevision;
-    U16     gKeyMinorRevision;
-    U16     gKeyNumberOfKeys;
+    U16     gKeyDirectoryVersion_;
+    U16     gKeyRevision_;
+    U16     gKeyMinorRevision_;
+    U16     gKeyNumberOfKeys_;
     
     cGeoKeyHeader();
     ~cGeoKeyHeader(){};
@@ -44,10 +44,10 @@ class cGeoKey : public cGeoKeyHeader
     
 public:
     
-    U16     gKeyID;
-    U16     gKeyTiffTagLocation;
-    U16     gKeyCount;
-    U16     gKeyValueOffset;
+    U16     gKeyID_;
+    U16     gKeyTiffTagLocation_;
+    U16     gKeyCount_;
+    U16     gKeyValueOffset_;
     
     cGeoKey();
     ~cGeoKey(){};

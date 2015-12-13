@@ -19,10 +19,10 @@ cGeoKeyHeader::cGeoKeyHeader() : cVlrHeader()
 void cGeoKeyHeader::read(std::fstream* inFile)
 {
     
-    inFile->read((char *)&gKeyDirectoryVersion, sizeof(gKeyDirectoryVersion));
-    inFile->read((char *)&gKeyRevision, sizeof(gKeyRevision));
-    inFile->read((char *)&gKeyMinorRevision, sizeof(gKeyMinorRevision));
-    inFile->read((char *)&gKeyNumberOfKeys, sizeof(gKeyNumberOfKeys));
+    inFile->read((char *)&gKeyDirectoryVersion_, sizeof(gKeyDirectoryVersion_));
+    inFile->read((char *)&gKeyRevision_, sizeof(gKeyRevision_));
+    inFile->read((char *)&gKeyMinorRevision_, sizeof(gKeyMinorRevision_));
+    inFile->read((char *)&gKeyNumberOfKeys_, sizeof(gKeyNumberOfKeys_));
     
 };
 
@@ -30,10 +30,10 @@ void cGeoKeyHeader::read(std::fstream* inFile)
 
 void cGeoKeyHeader::print() const
 {
-    std::cout << "geoKey directory version: " << gKeyDirectoryVersion << std::endl;
-    std::cout << "geoKey revision: " << gKeyRevision << std::endl;
-    std::cout << "geoKey minor revision: " << gKeyMinorRevision << std::endl;
-    std::cout << "geoKey number of keys: " << gKeyNumberOfKeys << std::endl;
+    std::cout << "geoKey directory version: " << gKeyDirectoryVersion_ << std::endl;
+    std::cout << "geoKey revision: " << gKeyRevision_ << std::endl;
+    std::cout << "geoKey minor revision: " << gKeyMinorRevision_ << std::endl;
+    std::cout << "geoKey number of keys: " << gKeyNumberOfKeys_ << std::endl;
     
 };
 
@@ -49,10 +49,10 @@ cGeoKey::cGeoKey()
 void cGeoKey::read(std::fstream* inFile)
 {
     
-    inFile->read((char *)&gKeyID, sizeof(gKeyID));
-    inFile->read((char *)&gKeyTiffTagLocation, sizeof(gKeyTiffTagLocation));
-    inFile->read((char *)&gKeyCount, sizeof(gKeyCount));
-    inFile->read((char *)&gKeyValueOffset, sizeof(gKeyValueOffset));
+    inFile->read((char *)&gKeyID_, sizeof(gKeyID_));
+    inFile->read((char *)&gKeyTiffTagLocation_, sizeof(gKeyTiffTagLocation_));
+    inFile->read((char *)&gKeyCount_, sizeof(gKeyCount_));
+    inFile->read((char *)&gKeyValueOffset_, sizeof(gKeyValueOffset_));
     
 }
 
@@ -60,8 +60,8 @@ void cGeoKey::read(std::fstream* inFile)
 void cGeoKey::print() const
 {
     
-    std::cout << "geoKey identity: " << gKeyID << std::endl;
-    std::cout << "geoKey Tiff tag location: " << gKeyTiffTagLocation << std::endl;
-    std::cout << "geoKey count: " << gKeyCount << std::endl;
-    std::cout << "geoKey value offset: " << gKeyValueOffset << std::endl;
+    std::cout << "geoKey identity: " << gKeyID_ << std::endl;
+    std::cout << "geoKey Tiff tag location: " << gKeyTiffTagLocation_ << std::endl;
+    std::cout << "geoKey count: " << gKeyCount_ << std::endl;
+    std::cout << "geoKey value offset: " << gKeyValueOffset_ << std::endl;
 }

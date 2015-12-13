@@ -87,10 +87,10 @@ void PulseWaves::readHeader()
 void PulseWaves::readVLR()
 {
 
-    cVlrHeader* vlrHeaderArr = new cVlrHeader[plsHeader_->nVLR];
+    cVlrHeader* vlrHeaderArr = new cVlrHeader[plsHeader_->nVLR_];
     
     // reading the VLR
-    for (int i = 0; i < plsHeader_->nVLR; i++)
+    for (int i = 0; i < plsHeader_->nVLR_; i++)
     {
         // getting the VLR ID record number
         U32 recID = cVlrHeader::whichVLR(inPlsFile_);
@@ -119,11 +119,11 @@ void PulseWaves::readVLR()
 //            vlrHeaderArr[i] = tempGKey;
             
             // creating another array of Geokey
-            cGeoKey* cGeoKeyArr = new cGeoKey[tempGKey.gKeyNumberOfKeys+1];
+            cGeoKey* cGeoKeyArr = new cGeoKey[tempGKey.gKeyNumberOfKeys_+1];
 //            cGeoKeyArr[0] = tempGKey;
             
-            for (int j = 1; j < tempGKey.gKeyNumberOfKeys+1; j++) {
-                std::cout << "GeoKey " << j << " of " << tempGKey.gKeyNumberOfKeys << std::endl;
+            for (int j = 1; j < tempGKey.gKeyNumberOfKeys_+1; j++) {
+                std::cout << "GeoKey " << j << " of " << tempGKey.gKeyNumberOfKeys_ << std::endl;
                 
                 cGeoKey tempGKey;
                 tempGKey.read(inPlsFile_);
@@ -148,10 +148,10 @@ void PulseWaves::readVLR()
             printSep();
             std::cout << "GeoDoubleParamsTag Record found..." << std::endl;
             
-            F64 tempArr[tempVlr->cVlrHeader::recordLengthAfterHeader / 8];
+            F64 tempArr[tempVlr->cVlrHeader::recordLengthAfterHeader_ / 8];
 //            boost::array<F64,3> tempArr;
             inPlsFile_->read((char *)&tempArr, sizeof(tempArr));
-            for (int z =0; z < tempVlr->cVlrHeader::recordLengthAfterHeader / 8; z++) {
+            for (int z =0; z < tempVlr->cVlrHeader::recordLengthAfterHeader_ / 8; z++) {
                 std::cout << tempArr[z] << ", ";
                 
             }
@@ -169,7 +169,7 @@ void PulseWaves::readVLR()
 
             std::cout << "GeoAsciiParamsTag Record found..." << std::endl;
             
-            const int length = tempVlr->cVlrHeader::recordLengthAfterHeader;
+            const int length = tempVlr->cVlrHeader::recordLengthAfterHeader_;
             U8 tempArr[length];
 //            boost::array<I8,23> tempArr;
             inPlsFile_->read((char *)&tempArr, sizeof(tempArr));
@@ -220,7 +220,7 @@ void PulseWaves::readVLR()
             
             cVlrHeader* tempVlr = new cVlrHeader;
             tempVlr->cVlrHeader::read(inPlsFile_);
-            inPlsFile_->seekg(tempVlr->recordLengthAfterHeader, std::ios::cur);
+            inPlsFile_->seekg(tempVlr->recordLengthAfterHeader_, std::ios::cur);
         }
         else
         {
@@ -230,7 +230,7 @@ void PulseWaves::readVLR()
             
             cVlrHeader* tempVlr = new cVlrHeader;
             tempVlr->cVlrHeader::read(inPlsFile_);
-            inPlsFile_->seekg(tempVlr->recordLengthAfterHeader, std::ios::cur);
+            inPlsFile_->seekg(tempVlr->recordLengthAfterHeader_, std::ios::cur);
         }
         
         

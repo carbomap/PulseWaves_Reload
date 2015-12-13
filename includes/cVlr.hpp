@@ -17,17 +17,18 @@
 #include "PulseWavesDefs.hpp"
 
 
+
 #pragma pack(push,1)
 class cVlrHeader
 {
     
 public:
     
-    I8       userID[PLS_USER_ID_SIZE];
-    U32      recordID;
-    U32      reserved;
-    I64      recordLengthAfterHeader;
-    I8       description[PLS_DESCRIPTION_SIZE];
+    I8       userID_[PLS_USER_ID_SIZE];
+    U32      recordID_;
+    U32      reserved_;
+    I64      recordLengthAfterHeader_;
+    I8       description_[PLS_DESCRIPTION_SIZE];
     
     
 //    virtual void readVLR(std::fstream&);
@@ -54,9 +55,6 @@ public:
         I8 tDescription[64];
         inFile->read((char *)&tDescription, sizeof(tDescription));
         
-        // debug -> to mimic the read of the actual VLR - this line needs to be commented out
-//        inFile->seekg(tRecLength, std::ios::cur);
-        // uncomment this line once the full reader implemented
         inFile->seekg(originCursorPos, std::ios::beg);
         
         return tRecID;
@@ -77,6 +75,8 @@ private:
 };
 #pragma pack(pop)
 
+
+
 //// The Scanner VLR descriptor - 100,001 <= Record ID < 100,255
 #pragma pack(push, 1)
 class cVlrScanner : public cVlrHeader
@@ -84,23 +84,23 @@ class cVlrScanner : public cVlrHeader
     
 public:
     
-    U32    size;
-    U32    reserved;
-    I8     instrument[64];
-    I8     serial[64];
-    F32    wavelength;
-    F32    outgoingPulseWidth;
-    U32    scanPattern;
-    U32    numberOfMirrorFacets;
-    F32    scanFrequency;
-    F32    scanMinAngle;
-    F32    scanMaxAngle;
-    F32    pulseFrequency;
-    F32    beamDiameterAtExit;
-    F32    beamDivergeance;
-    F32    minimalRange;
-    F32    maximalRange;
-    I8     description[PLS_DESCRIPTION_SIZE];
+    U32    size_;
+    U32    reserved_;
+    I8     instrument_[64];
+    I8     serial_[64];
+    F32    wavelength_;
+    F32    outgoingPulseWidth_;
+    U32    scanPattern_;
+    U32    numberOfMirrorFacets_;
+    F32    scanFrequency_;
+    F32    scanMinAngle_;
+    F32    scanMaxAngle_;
+    F32    pulseFrequency_;
+    F32    beamDiameterAtExit_;
+    F32    beamDivergeance_;
+    F32    minimalRange_;
+    F32    maximalRange_;
+    I8     description_[PLS_DESCRIPTION_SIZE];
     
     cVlrScanner();
     ~cVlrScanner(){};
@@ -113,6 +113,7 @@ public:
 
 
 
+
 // The Sampling Record
 #pragma pack(push, 1)
 class cVlrSamplingRecord
@@ -120,23 +121,23 @@ class cVlrSamplingRecord
     
 public:
     
-    U32     size;
-    U32     reserved;
-    U8      type;
-    U8      channel;
-    U8      notUsed;
-    U8      bitsForDurationFromAnchor;
-    F32     scaleForDurationFromAnchor;
-    F32     offsetForDurationFromAnchor;
-    U8      bitsForNumberOfSegments;
-    U8      bitsForNumberOfSamples;
-    U16     numberOfSegments;
-    U32     numberOfSamples;
-    U16     bitsPerSample;
-    U16     lutIndex;
-    F32     sampleUnits;
-    U32     compression;
-    I8      description[PLS_DESCRIPTION_SIZE];
+    U32     size_;
+    U32     reserved_;
+    U8      type_;
+    U8      channel_;
+    U8      notUsed_;
+    U8      bitsForDurationFromAnchor_;
+    F32     scaleForDurationFromAnchor_;
+    F32     offsetForDurationFromAnchor_;
+    U8      bitsForNumberOfSegments_;
+    U8      bitsForNumberOfSamples_;
+    U16     numberOfSegments_;
+    U32     numberOfSamples_;
+    U16     bitsPerSample_;
+    U16     lutIndex_;
+    F32     sampleUnits_;
+    U32     compression_;
+    I8      description_[PLS_DESCRIPTION_SIZE];
     
     cVlrSamplingRecord();
     ~cVlrSamplingRecord(){};
@@ -156,15 +157,15 @@ class cVlrPulseSampling : public cVlrHeader, public cVlrSamplingRecord
     
 public:
 
-    U32     size;
-    U32     reserved;
-    U32     opticalCenterToAnchorPoint;
-    U16     numberOfExtraWaveBytes;
-    U16     numberOfSamplings;
-    F32     sampleUnit;
-    U32     compression;
-    U32     scannerIndex;
-    I8      description[PLS_DESCRIPTION_SIZE];
+    U32     size_;
+    U32     reserved_;
+    U32     opticalCenterToAnchorPoint_;
+    U16     numberOfExtraWaveBytes_;
+    U16     numberOfSamplings_;
+    F32     sampleUnit_;
+    U32     compression_;
+    U32     scannerIndex_;
+    I8      description_[PLS_DESCRIPTION_SIZE];
 
 cVlrPulseSampling();
 ~cVlrPulseSampling()
@@ -194,10 +195,10 @@ class cLutHeader : public cVlrHeader
     
 public:
     
-    U32     size;
-    U32     reserved;
-    I32     numberOfTable;
-    I8      description[PLS_DESCRIPTION_SIZE];
+    U32     size_;
+    U32     reserved_;
+    I32     numberOfTable_;
+    I8      description_[PLS_DESCRIPTION_SIZE];
     
     cLutHeader();
     ~cLutHeader(){};
@@ -218,14 +219,14 @@ class cLutRecord : public cLutHeader
     
 public:
 
-    U32     size;
-    U32     reserved;
-    U32     numberOfEntries;
-    U16     unitOfMeasurement;
-    U8      dataType;
-    U8      options;
-    U32     compression;
-    I8      description[PLS_DESCRIPTION_SIZE];
+    U32     size_;
+    U32     reserved_;
+    U32     numberOfEntries_;
+    U16     unitOfMeasurement_;
+    U8      dataType_;
+    U8      options_;
+    U32     compression_;
+    I8      description_[PLS_DESCRIPTION_SIZE];
     
     cLutRecord();
     ~cLutRecord(){};
