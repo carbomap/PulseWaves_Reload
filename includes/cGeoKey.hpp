@@ -12,26 +12,31 @@
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
+#include <vector>
 #include "PulseWavesDefs.hpp"
 #include "cVlr.hpp"
 
 
+
 #pragma pack(push, 1)
-class cGeoKeyHeader : public cVlrHeader
+class cGeoKeyDir_subKey
 {
     
 public:
     
-    U16     gKeyDirectoryVersion;
-    U16     gKeyRevision;
-    U16     gKeyMinorRevision;
-    U16     gKeyNumberOfKeys;
+    U16     gKeyID_;
+    U16     gKeyTiffTagLocation_;
+    U16     gKeyCount_;
+    U16     gKeyValueOffset_;
     
-    cGeoKeyHeader();
-    ~cGeoKeyHeader(){};
+    cGeoKeyDir_subKey();
+    ~cGeoKeyDir_subKey(){};
     
     void read(std::fstream*);
+
     void print() const;
+    
+
     
 };
 #pragma pack(pop)
@@ -39,32 +44,103 @@ public:
 
 
 #pragma pack(push, 1)
-class cGeoKey : public cGeoKeyHeader
+class cGeoKeyDir
 {
     
 public:
     
-    U16     gKeyID;
-    U16     gKeyTiffTagLocation;
-    U16     gKeyCount;
-    U16     gKeyValueOffset;
+    U16     gKeyDirectoryVersion_;
+    U16     gKeyRevision_;
+    U16     gKeyMinorRevision_;
+    U16     gKeyNumberOfKeys_;
     
-    cGeoKey();
+    cGeoKeyDir();
+    ~cGeoKeyDir()
+    {
+        cGeoKeySubDirArr_ = 0;
+    };
+    
+    void read(std::fstream*);
+    void readGeoKeySubDir(std::fstream*);
+    void print() const;
+    
+private:
+    
+    cGeoKeyDir_subKey* cGeoKeySubDirArr_;
+    
+    
+};
+#pragma pack(pop)
+
+
+
+#pragma pack(push, 1)
+class cGeoKeyDblPrm : public cVlrHeader
+{
+    
+public:
+    
+    cGeoKeyDblPrm();
+    ~cGeoKeyDblPrm(){};
+    
+    void read(std::fstream*);
+    void print() const;
+    
+private:
+    
+    std::vector<U64>* vecArr_;
+
+    
+};
+#pragma pack(pop)
+
+
+
+
+#pragma pack(push, 1)
+class cGeoKeyAscii : public cVlrHeader
+{
+    
+public:
+    
+    
+    cGeoKeyAscii();
+    ~cGeoKeyAscii(){};
+    
+    void read(std::fstream*);
+    void print() const;
+    
+private:
+    
+    U8* vecArr_;
+//    std::vector<U8>* vecArr_;
+    
+};
+#pragma pack(pop)
+
+
+
+
+#pragma pack(push, 1)
+class cGeoKey : public cVlrHeader
+{
+    
+public:
+    
+    cGeoKey(std::fstream*, U32*);
     ~cGeoKey(){};
     
     void read(std::fstream*);
     void print() const;
     
+private:
     
-//private:
-//    
-//    cGeoKey* cGeoKeyArr = new cGeoKey;
-    
+    cGeoKeyDir*     cGeoKeyDir_;
+    cGeoKeyDblPrm*  cGeoKeyDP_;
+    cGeoKeyAscii*   cGeoKeyAscii_;
     
 };
 #pragma pack(pop)
-
-
 
 
 #endif /* cGeoKey_hpp */

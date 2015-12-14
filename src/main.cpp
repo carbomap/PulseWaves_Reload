@@ -11,8 +11,7 @@
 
 int main(int argc, const char * argv[]) {
 
-	PulseWaves plsObj("../../sample_data/riegl_example1.pls");
-//    PulseWaves plsObj("/Users/moi/Documents/Carbomap/2015_Multispectral_Lidar_Defra/Riegl/pulsewaves/q560/Bertholdstein - Q560_9996619 - 150528_133849 - originalpoints.pls");
-
+//	PulseWaves plsObj("../../sample_data/riegl_example1.pls");
+    PulseWaves plsObj("/Users/antoine/Processing_Temp_Folder/Bertholdstein_process_need_sptaial_indexing/q560/Bertholdstein - Q560_9996619 - 150528_133849 - originalpoints.pls");
 	return 0;
 }
