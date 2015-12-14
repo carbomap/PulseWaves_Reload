@@ -21,45 +21,45 @@ void cPlsHeader::read(std::fstream* plsInFile)
 {
     
     // reading the file into memory
-    plsInFile->read((char *)&fileSignature, sizeof(fileSignature));
-    plsInFile->read((char *)&globalParameter, sizeof(globalParameter));
-    plsInFile->read((char *)&fileSourceID, sizeof(fileSourceID));
-    plsInFile->read((char *)&guid01, sizeof(guid01));
-    plsInFile->read((char *)&guid02, sizeof(guid02));
-    plsInFile->read((char *)&guid03, sizeof(guid03));
-    plsInFile->read((char *)&guid04, sizeof(guid04));
-    plsInFile->read((char *)&systemID, sizeof(systemID));
-    plsInFile->read((char *)&generatingSoftware, sizeof(generatingSoftware));
-    plsInFile->read((char *)&day, sizeof(day));
-    plsInFile->read((char *)&year, sizeof(year));
-    plsInFile->read((char *)&versionMajor, sizeof(versionMajor));
-    plsInFile->read((char *)&versionMinor, sizeof(versionMinor));
-    plsInFile->read((char *)&headerSize, sizeof(headerSize));
-    plsInFile->read((char *)&dataOffet, sizeof(dataOffet));
-    plsInFile->read((char *)&nPulses, sizeof(nPulses));
-    plsInFile->read((char *)&pulseFormat, sizeof(pulseFormat));
-    plsInFile->read((char *)&pulseAttributes, sizeof(pulseAttributes));
-    plsInFile->read((char *)&pulseSize, sizeof(pulseSize));
-    plsInFile->read((char *)&pulseCompression, sizeof(pulseCompression));
-    plsInFile->read((char *)&reserved, sizeof(reserved));
-    plsInFile->read((char *)&nVLR, sizeof(nVLR));
-    plsInFile->read((char *)&nAVLR, sizeof(nAVLR));
-    plsInFile->read((char *)&scaleT, sizeof(scaleT));
-    plsInFile->read((char *)&offsetT, sizeof(offsetT));
-    plsInFile->read((char *)&minT, sizeof(minT));
-    plsInFile->read((char *)&maxT, sizeof(maxT));
-    plsInFile->read((char *)&scaleX, sizeof(scaleX));
-    plsInFile->read((char *)&scaleY, sizeof(scaleY));
-    plsInFile->read((char *)&scaleZ, sizeof(scaleZ));
-    plsInFile->read((char *)&offsetX, sizeof(offsetX));
-    plsInFile->read((char *)&offsetY, sizeof(offsetY));
-    plsInFile->read((char *)&offsetZ, sizeof(offsetZ));
-    plsInFile->read((char *)&minX, sizeof(minX));
-    plsInFile->read((char *)&maxX, sizeof(maxX));
-    plsInFile->read((char *)&minY, sizeof(minY));
-    plsInFile->read((char *)&maxY, sizeof(maxY));
-    plsInFile->read((char *)&minZ, sizeof(minZ));
-    plsInFile->read((char *)&maxZ, sizeof(maxZ));
+    plsInFile->read((char *)&fileSignature_, sizeof(fileSignature_));
+    plsInFile->read((char *)&globalParameter_, sizeof(globalParameter_));
+    plsInFile->read((char *)&fileSourceID_, sizeof(fileSourceID_));
+    plsInFile->read((char *)&guid01_, sizeof(guid01_));
+    plsInFile->read((char *)&guid02_, sizeof(guid02_));
+    plsInFile->read((char *)&guid03_, sizeof(guid03_));
+    plsInFile->read((char *)&guid04_, sizeof(guid04_));
+    plsInFile->read((char *)&systemID_, sizeof(systemID_));
+    plsInFile->read((char *)&generatingSoftware_, sizeof(generatingSoftware_));
+    plsInFile->read((char *)&day_, sizeof(day_));
+    plsInFile->read((char *)&year_, sizeof(year_));
+    plsInFile->read((char *)&versionMajor_, sizeof(versionMajor_));
+    plsInFile->read((char *)&versionMinor_, sizeof(versionMinor_));
+    plsInFile->read((char *)&headerSize_, sizeof(headerSize_));
+    plsInFile->read((char *)&dataOffet_, sizeof(dataOffet_));
+    plsInFile->read((char *)&nPulses_, sizeof(nPulses_));
+    plsInFile->read((char *)&pulseFormat_, sizeof(pulseFormat_));
+    plsInFile->read((char *)&pulseAttributes_, sizeof(pulseAttributes_));
+    plsInFile->read((char *)&pulseSize_, sizeof(pulseSize_));
+    plsInFile->read((char *)&pulseCompression_, sizeof(pulseCompression_));
+    plsInFile->read((char *)&reserved_, sizeof(reserved_));
+    plsInFile->read((char *)&nVLR_, sizeof(nVLR_));
+    plsInFile->read((char *)&nAVLR_, sizeof(nAVLR_));
+    plsInFile->read((char *)&scaleT_, sizeof(scaleT_));
+    plsInFile->read((char *)&offsetT_, sizeof(offsetT_));
+    plsInFile->read((char *)&minT_, sizeof(minT_));
+    plsInFile->read((char *)&maxT_, sizeof(maxT_));
+    plsInFile->read((char *)&scaleX_, sizeof(scaleX_));
+    plsInFile->read((char *)&scaleY_, sizeof(scaleY_));
+    plsInFile->read((char *)&scaleZ_, sizeof(scaleZ_));
+    plsInFile->read((char *)&offsetX_, sizeof(offsetX_));
+    plsInFile->read((char *)&offsetY_, sizeof(offsetY_));
+    plsInFile->read((char *)&offsetZ_, sizeof(offsetZ_));
+    plsInFile->read((char *)&minX_, sizeof(minX_));
+    plsInFile->read((char *)&maxX_, sizeof(maxX_));
+    plsInFile->read((char *)&minY_, sizeof(minY_));
+    plsInFile->read((char *)&maxY_, sizeof(maxY_));
+    plsInFile->read((char *)&minZ_, sizeof(minZ_));
+    plsInFile->read((char *)&maxZ_, sizeof(maxZ_));
     
 
 };
@@ -75,55 +75,53 @@ void cPlsHeader::print() const
     
     std::cout << "File signature:\t\t ";
     for (int i = 0; i < 16; i++) {
-        std::cout << fileSignature[i];
+        std::cout << fileSignature_[i];
     }
     std::cout << std::endl;
     
-    std::cout << "Global Parameter:\t " << globalParameter << std::endl;
-    std::cout << "File Source ID:\t\t " << fileSourceID << std::endl;
-    std::cout << "GUID 01:\t\t\t " << guid01 << std::endl;
-    std::cout << "GUID 02:\t\t\t " << guid02 << std::endl;
-    std::cout << "GUID 03:\t\t\t " << guid03 << std::endl;
+    std::cout << "Global Parameter:\t " << globalParameter_ << std::endl;
+    std::cout << "File Source ID:\t\t " << fileSourceID_ << std::endl;
+    std::cout << "GUID 01:\t\t\t " << guid01_ << std::endl;
+    std::cout << "GUID 02:\t\t\t " << guid02_ << std::endl;
+    std::cout << "GUID 03:\t\t\t " << guid03_ << std::endl;
     
     std::cout << "GUID 04:\t\t\t ";
     for (int i =0; i < 8; i++) {
-        std::cout << boost::lexical_cast<std::string>(guid04[i]);
+        std::cout << boost::lexical_cast<std::string>(guid04_[i]);
     }
     std::cout << std::endl;
     
     std::cout << "System ID:\t\t\t ";
     for (int i =0; i < 64; i++) {
-        std::cout << systemID[i];
+        std::cout << systemID_[i];
     }
     std::cout << std::endl;
     
     std::cout << "Software ID:\t\t ";
     for (int i =0; i < 64; i++) {
-        std::cout << generatingSoftware[i];
+        std::cout << generatingSoftware_[i];
     }
     std::cout << std::endl;
     
     
-    std::cout << "Day:\t\t\t\t " << day << std::endl;
-    std::cout << "Year:\t\t\t\t " << year << std::endl;
-    std::cout << "Header size:\t\t " << headerSize << " Bytes" << std::endl;
-    std::cout << "Version Major:\t\t " << boost::lexical_cast<std::string>(versionMajor) << std::endl;
-    std::cout << "Version Minor:\t\t " << boost::lexical_cast<std::string>(versionMinor) << std::endl;
-    std::cout << "Header Size:\t\t " << headerSize << std::endl;
-    std::cout << "Pulse Data Offet:\t " << dataOffet << " Bytes" << std::endl;
-    std::cout << "Number of Pulses:\t " << nPulses << std::endl;
-    std::cout << "Pulse Format:\t\t " << pulseFormat << std::endl;
-    std::cout << "pulse Attributes:\t " << pulseAttributes << std::endl;
-    std::cout << "pulse Size:\t\t\t " << pulseSize << " Bytes" << std::endl;
-    if (pulseCompression == 0){std::cout << "Pulses are NOT compressed..." << std::endl;} else {std::cout << "Pulses are compressed..." << std::endl;}
-    std::cout << "Number of VLR:\t\t " << nVLR << std::endl;
-    std::cout << "Number of AVLR:\t\t " << nAVLR << std::endl;
-    std::cout << "Time Scale/Offset:\t " << scaleT << ", " << offsetT << std::endl;
-    std::cout << "Min/Max Time:\t\t " << minT << ", " << maxT << std::endl;
-    std::cout << "Scale XYZ:\t\t\t " << scaleX << ", " << scaleY << ", " << scaleZ << std::endl;
-    std::cout << "Offset XYZ:\t\t\t " << offsetX << ", " << offsetY << ", " << offsetZ << std::endl;
-    std::cout << "Minimum XYZ:\t\t " << minX << ", " << minY << ", " << minZ << std::endl;
-    std::cout << "Maximum XYZ:\t\t " << maxX << ", " << maxY << ", " << maxZ << std::endl;
+    std::cout << "Day/Year:\t\t\t " << day_ << "/" << year_ << std::endl;
+    std::cout << "Header size:\t\t " << headerSize_ << " Bytes" << std::endl;
+    std::cout << "Version Major.Minor: " << static_cast<unsigned>(versionMajor_) << "." << static_cast<unsigned>(versionMinor_) << std::endl;
+    std::cout << "Header Size:\t\t " << headerSize_ << std::endl;
+    std::cout << "Pulse Data Offet:\t " << dataOffet_ << " Bytes" << std::endl;
+    std::cout << "Number of Pulses:\t " << nPulses_ << std::endl;
+    std::cout << "Pulse Format:\t\t " << pulseFormat_ << std::endl;
+    std::cout << "pulse Attributes:\t " << pulseAttributes_ << std::endl;
+    std::cout << "pulse Size:\t\t\t " << pulseSize_ << " Bytes" << std::endl;
+    if (pulseCompression_ == 0){std::cout << "Pulses are NOT compressed..." << std::endl;} else {std::cout << "Pulses are compressed..." << std::endl;}
+    std::cout << "Number of VLR:\t\t " << nVLR_ << std::endl;
+    std::cout << "Number of AVLR:\t\t " << nAVLR_ << std::endl;
+    std::cout << "Time Scale/Offset:\t " << scaleT_ << ", " << offsetT_ << std::endl;
+    std::cout << "Min/Max Time:\t\t " << minT_ << ", " << maxT_ << std::endl;
+    std::cout << "Scale XYZ:\t\t\t " << scaleX_ << ", " << scaleY_ << ", " << scaleZ_ << std::endl;
+    std::cout << "Offset XYZ:\t\t\t " << offsetX_ << ", " << offsetY_ << ", " << offsetZ_ << std::endl;
+    std::cout << "Minimum XYZ:\t\t " << minX_ << ", " << minY_ << ", " << minZ_ << std::endl;
+    std::cout << "Maximum XYZ:\t\t " << maxX_ << ", " << maxY_ << ", " << maxZ_ << std::endl;
     
     std::cout << "" << std::endl;
     
