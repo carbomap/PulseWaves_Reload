@@ -167,22 +167,57 @@ public:
     U32     scannerIndex_;
     I8      description_[PLS_DESCRIPTION_SIZE];
 
-cVlrPulseSampling();
-~cVlrPulseSampling()
+    cVlrPulseSampling();
+    ~cVlrPulseSampling()
     {
         samplingRecordArr_ = 0;
     };
 
-virtual void read(std::fstream*);
-virtual void print() const;
-    
-void read_SamplingRecords(std::fstream*);
-    
+    virtual void read(std::fstream*);
+    void read_SamplingRecords(std::fstream*);
+    virtual void print() const;
+
 private:
     
     cVlrSamplingRecord* samplingRecordArr_;
     
 
+};
+#pragma pack(pop)
+
+
+
+// The Look-Up Table Record VLR descriptor
+#pragma pack(push, 1)
+class cLutRecord
+{
+    
+public:
+    
+    U32     size_;
+    U32     reserved_;
+    U32     numberOfEntries_;
+    U16     unitOfMeasurement_;
+    U8      dataType_;
+    U8      options_;
+    U32     compression_;
+    I8      description_[PLS_DESCRIPTION_SIZE];
+    
+    cLutRecord();
+    ~cLutRecord()
+    {
+        lutTableArray_ = 0;
+    }
+    
+    void read(std::fstream*);
+    void readLutArray(std::fstream*);
+    void print() const;
+    void printLutArray() const;
+    
+private:
+    
+    F32* lutTableArray_;
+    
 };
 #pragma pack(pop)
 
@@ -201,38 +236,19 @@ public:
     I8      description_[PLS_DESCRIPTION_SIZE];
     
     cLutHeader();
-    ~cLutHeader(){};
+    ~cLutHeader()
+    {
+        lutTableHeader_ = 0;
+    }
     
     virtual void read(std::fstream*);
+    void readLutTable(std::fstream*);
     virtual void print() const;
     
+private:
     
-};
-#pragma pack(pop)
-
-
-
-// The Look-Up Table Record VLR descriptor
-#pragma pack(push, 1)
-class cLutRecord : public cLutHeader
-{
+    cLutRecord* lutTableHeader_;
     
-public:
-
-    U32     size_;
-    U32     reserved_;
-    U32     numberOfEntries_;
-    U16     unitOfMeasurement_;
-    U8      dataType_;
-    U8      options_;
-    U32     compression_;
-    I8      description_[PLS_DESCRIPTION_SIZE];
-    
-    cLutRecord();
-    ~cLutRecord(){};
-    
-    virtual void read(std::fstream*);
-    virtual void print() const;
     
 };
 #pragma pack(pop)

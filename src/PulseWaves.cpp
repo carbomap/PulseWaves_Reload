@@ -41,9 +41,13 @@ PulseWaves::PulseWaves(std::string inFile)
     else
     {
         
+        std::cout << "Reading header..." << std::endl;
         this->readHeader();
+        std::cout << "Reading Variable Length Records..." << std::endl;
         this->readVLR();
+        std::cout << "Reading Data Records..." << std::endl;
         this->readData();
+        std::cout << "Reading Append Variable Length Record..." << std::endl;
         this->readAVLR();
 
     }
@@ -94,87 +98,16 @@ void PulseWaves::readVLR()
     {
         // getting the VLR ID record number
         U32 recID = cVlrHeader::whichVLR(inPlsFile_);
+        std::cout << "reckon recID: " << recID << std::endl;
         
         // instantiate the correct VLR class
-        if (recID == 34735)
+        if (recID >= 34735 && recID <= 34757)
         {
             
-            cVlrHeader* tempVlr = new cVlrHeader;
-            tempVlr->cVlrHeader::read(inPlsFile_);
-            
             printSep();
-            tempVlr->cVlrHeader::print();
-            
-            vlrHeaderArr[i] = *tempVlr;
-            
-            printSep();
-            std::cout << "GeoKeyDirectoryTag Record found..." << std::endl;
-            
-            cGeoKeyHeader tempGKey;
-            tempGKey.read(inPlsFile_);
-            tempGKey.print();
-            printSep();
-            
-            // putting GeoKey header in the vlr array
-//            vlrHeaderArr[i] = tempGKey;
-            
-            // creating another array of Geokey
-            cGeoKey* cGeoKeyArr = new cGeoKey[tempGKey.gKeyNumberOfKeys_+1];
-//            cGeoKeyArr[0] = tempGKey;
-            
-            for (int j = 1; j < tempGKey.gKeyNumberOfKeys_+1; j++) {
-                std::cout << "GeoKey " << j << " of " << tempGKey.gKeyNumberOfKeys_ << std::endl;
-                
-                cGeoKey tempGKey;
-                tempGKey.read(inPlsFile_);
-                tempGKey.print();
-                printSep();
-                // putting GeoKey header in the vlr array
-                cGeoKeyArr[j] = tempGKey;
-            }
-            
-            cGeoKeyArr_ = cGeoKeyArr;
-            
-        }
-        else if (recID == 34736)
-        {
-            cVlrHeader* tempVlr = new cVlrHeader;
-            tempVlr->cVlrHeader::read(inPlsFile_);
-            
-            tempVlr->cVlrHeader::print();
-            
-            vlrHeaderArr[i] = *tempVlr;
-            
-            printSep();
-            std::cout << "GeoDoubleParamsTag Record found..." << std::endl;
-            
-            F64 tempArr[tempVlr->cVlrHeader::recordLengthAfterHeader_ / 8];
-//            boost::array<F64,3> tempArr;
-            inPlsFile_->read((char *)&tempArr, sizeof(tempArr));
-            for (int z =0; z < tempVlr->cVlrHeader::recordLengthAfterHeader_ / 8; z++) {
-                std::cout << tempArr[z] << ", ";
-                
-            }
-            std::cout << "" << std::endl;
-            printSep();
-            
-        }
-        else if (recID == 34737)
-        {
-            cVlrHeader* tempVlr = new cVlrHeader;
-            tempVlr->cVlrHeader::read(inPlsFile_);
-            
-            tempVlr->cVlrHeader::print();
-            printSep();
-
-            std::cout << "GeoAsciiParamsTag Record found..." << std::endl;
-            
-            const int length = tempVlr->cVlrHeader::recordLengthAfterHeader_;
-            U8 tempArr[length];
-//            boost::array<I8,23> tempArr;
-            inPlsFile_->read((char *)&tempArr, sizeof(tempArr));
-            std::cout << tempArr << std::endl;
-            
+            std::cout << "GeoKey descriptor found..." << std::endl;
+            cGeoKey tempGK(inPlsFile_, &recID);
+            vlrHeaderArr[i] = tempGK;
             
         }
         else if (recID >= 100001 && recID < 100255)
@@ -218,9 +151,11 @@ void PulseWaves::readVLR()
             printSep();
             std::cout << "Lookup Table descriptor found..." << std::endl;
             
-            cVlrHeader* tempVlr = new cVlrHeader;
+            cLutHeader* tempVlr = new cLutHeader;
             tempVlr->cVlrHeader::read(inPlsFile_);
-            inPlsFile_->seekg(tempVlr->recordLengthAfterHeader_, std::ios::cur);
+            tempVlr->read(inPlsFile_);
+            tempVlr->readLutTable(inPlsFile_);
+            
         }
         else
         {

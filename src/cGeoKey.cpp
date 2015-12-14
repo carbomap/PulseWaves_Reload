@@ -8,15 +8,78 @@
 
 #include "../includes/cGeoKey.hpp"
 #include <iostream>
+#include <vector>
+#include <boost/lexical_cast.hpp>
+#include "../includes/PulseWavesDefs.hpp"
 
-cGeoKeyHeader::cGeoKeyHeader() : cVlrHeader()
+cGeoKey::cGeoKey(std::fstream* inFile, U32* recID) : cVlrHeader()
 {
-//        cVlrHeader* vlrHeader = new cVlrHeader;
+
+    if (*recID == 34735)
+    {
+        
+        std::cout << "GeoKeyDirectoryTag Record found..." << std::endl;
+        this->cVlrHeader::read(inFile);
+        this->cVlrHeader::print();
+        
+        cGeoKeyDir* GeoKeyDir_ = new cGeoKeyDir;
+        GeoKeyDir_->read(inFile);
+        GeoKeyDir_->print();
+        GeoKeyDir_->readGeoKeySubDir(inFile);
+        
+    }
+    else if (*recID == 34736)
+    {
+       
+        std::cout << "GeoDoubleParamsTag Record found..." << std::endl;
+        
+        cGeoKeyDblPrm*  cGeoKeyDP_ = new cGeoKeyDblPrm;
+        cGeoKeyDP_->cVlrHeader::read(inFile);
+        cGeoKeyDP_->cVlrHeader::print();
+        cGeoKeyDP_->read(inFile);
+        cGeoKeyDP_->print();
+        
+        
+    }
+    else if (*recID == 34737)
+    {
+        std::cout << "GeoAsciiParamsTag Record found..." << std::endl;
+        cGeoKeyAscii*  cGeoKeyAC_ = new cGeoKeyAscii;
+        cGeoKeyAC_->cVlrHeader::read(inFile);
+        cGeoKeyAC_->cVlrHeader::print();
+        cGeoKeyAC_->read(inFile);
+        cGeoKeyAC_->print();
+        
+
+        
+    }
+
+}
+
+
+void cGeoKey::read(std::fstream* inFile)
+{
+    
 }
 
 
 
-void cGeoKeyHeader::read(std::fstream* inFile)
+void cGeoKey::print() const
+{
+    
+}
+
+
+
+
+cGeoKeyDir::cGeoKeyDir()
+{
+    
+}
+
+
+
+void cGeoKeyDir::read(std::fstream* inFile)
 {
     
     inFile->read((char *)&gKeyDirectoryVersion_, sizeof(gKeyDirectoryVersion_));
@@ -28,7 +91,32 @@ void cGeoKeyHeader::read(std::fstream* inFile)
 
 
 
-void cGeoKeyHeader::print() const
+void cGeoKeyDir::readGeoKeySubDir(std::fstream* inFile)
+{
+    
+    // creating an array of GeokeySubDir
+    cGeoKeyDir_subKey* cGeoKeySubDirArr_ = new cGeoKeyDir_subKey[gKeyNumberOfKeys_];
+    
+    
+    for (int j = 0; j < gKeyNumberOfKeys_; j++)
+    {
+        
+        std::cout << "GeoKey " << j+1 << " of " << gKeyNumberOfKeys_ << std::endl;
+        
+        cGeoKeyDir_subKey tempGKeySDir;
+        tempGKeySDir.read(inFile);
+        tempGKeySDir.print();
+//        printSep();
+        // putting GeoKey header in the vlr array
+        cGeoKeySubDirArr_[j] = tempGKeySDir;
+    
+    }
+    
+}
+
+
+
+void cGeoKeyDir::print() const
 {
     std::cout << "geoKey directory version: " << gKeyDirectoryVersion_ << std::endl;
     std::cout << "geoKey revision: " << gKeyRevision_ << std::endl;
@@ -39,14 +127,15 @@ void cGeoKeyHeader::print() const
 
 
 
-cGeoKey::cGeoKey()
+cGeoKeyDir_subKey::cGeoKeyDir_subKey()
 {
 
+    
 }
 
 
 
-void cGeoKey::read(std::fstream* inFile)
+void cGeoKeyDir_subKey::read(std::fstream* inFile)
 {
     
     inFile->read((char *)&gKeyID_, sizeof(gKeyID_));
@@ -57,7 +146,8 @@ void cGeoKey::read(std::fstream* inFile)
 }
 
 
-void cGeoKey::print() const
+
+void cGeoKeyDir_subKey::print() const
 {
     
     std::cout << "geoKey identity: " << gKeyID_ << std::endl;
@@ -65,3 +155,92 @@ void cGeoKey::print() const
     std::cout << "geoKey count: " << gKeyCount_ << std::endl;
     std::cout << "geoKey value offset: " << gKeyValueOffset_ << std::endl;
 }
+
+
+
+cGeoKeyDblPrm::cGeoKeyDblPrm() : cVlrHeader()
+{
+    
+}
+
+
+
+void cGeoKeyDblPrm::read(std::fstream* inFile)
+{
+ 
+    size_t size = recordLengthAfterHeader_ / 8;
+//    F64* vecArr_ = new F64[size];
+    F64 vecArr_[size];
+    inFile->read((char *)&vecArr_, sizeof(vecArr_));
+    
+}
+
+
+
+void cGeoKeyDblPrm::print() const
+{
+    for (int z = 0; z < (this->cVlrHeader::recordLengthAfterHeader_ / 8); z++) {
+        if (z == (this->cVlrHeader::recordLengthAfterHeader_ / 8) - 1) {
+            std::cout << &vecArr_[z];
+        } else std::cout << &vecArr_[z] << ", ";
+        
+    }
+    
+    std::cout << "" << std::endl;
+
+}
+
+
+
+cGeoKeyAscii::cGeoKeyAscii()
+{
+    
+}
+
+
+
+void cGeoKeyAscii::read(std::fstream* inFile)
+{
+    
+    size_t size = this->cVlrHeader::recordLengthAfterHeader_;
+    U8* vVecArr_ =  new U8[size];
+//    inFile->read((char *)&vVecArr_, sizeof(vVecArr_));
+    
+    
+    
+    U8 dum;
+    for(size_t i=0; i<size; i++)
+    {
+        inFile->read((char *)&dum, sizeof(dum));
+        vVecArr_[i] = dum;
+    }
+
+    
+//    vecArr_ = &vVecArr_;
+//    inFile->read((char *)&vVecArr_, sizeof(vVecArr_));
+    
+//    std::vector<U8> vVecArr_;
+//    U8 dum;
+//    for(int i=0; i<size; i++)
+//    {
+//        inFile->read((char *)&dum, sizeof(dum));
+//        vVecArr_.push_back(dum);
+//        
+//    }
+    
+    vecArr_ = vVecArr_;
+}
+
+
+
+void cGeoKeyAscii::print() const
+{
+
+
+        std::cout << vecArr_ << std::endl;
+    
+}
+
+
+
+

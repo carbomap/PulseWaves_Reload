@@ -106,8 +106,7 @@ void cPlsHeader::print() const
     
     std::cout << "Day/Year:\t\t\t " << day_ << "/" << year_ << std::endl;
     std::cout << "Header size:\t\t " << headerSize_ << " Bytes" << std::endl;
-    std::cout << "Version Major:\t\t " << boost::lexical_cast<std::string>(versionMajor_) << std::endl;
-    std::cout << "Version Minor:\t\t " << boost::lexical_cast<std::string>(versionMinor_) << std::endl;
+    std::cout << "Version Major.Minor: " << static_cast<unsigned>(versionMajor_) << "." << static_cast<unsigned>(versionMinor_) << std::endl;
     std::cout << "Header Size:\t\t " << headerSize_ << std::endl;
     std::cout << "Pulse Data Offet:\t " << dataOffet_ << " Bytes" << std::endl;
     std::cout << "Number of Pulses:\t " << nPulses_ << std::endl;

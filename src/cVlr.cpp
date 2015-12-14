@@ -160,8 +160,8 @@ void cVlrSamplingRecord::print() const
     {
         std::cout << "Pulses is RETURNING" << std::endl;
     }
-    std::cout << "Sampling channel: " << channel_ << std::endl;
-    std::cout << "Sampling bits for duration from anchor: " << bitsForDurationFromAnchor_ << std::endl;
+    std::cout << "Sampling channel: " << static_cast<unsigned>(channel_) << std::endl;
+    std::cout << "Sampling bits for duration from anchor: " << static_cast<unsigned>(bitsForDurationFromAnchor_) << std::endl;
     std::cout << "Sampling scale for duration from anchor: " << scaleForDurationFromAnchor_ << std::endl;
     std::cout << "Sampling offset for duration from anchor: " << offsetForDurationFromAnchor_ << std::endl;
     std::cout << "Sampling bits for number of segments: " << bitsForNumberOfSegments_ << std::endl;
@@ -248,14 +248,38 @@ void cVlrPulseSampling::read_SamplingRecords(std::fstream* inFile)
 }
 
 
-cLutHeader::cLutHeader()
+cLutHeader::cLutHeader() : cVlrHeader()
 {
-    
 }
 
 
 void cLutHeader::read(std::fstream* inFile)
 {
+    
+    inFile->read((char *)&size_, sizeof(size_));
+    inFile->read((char *)&reserved_, sizeof(reserved_));
+    inFile->read((char *)&numberOfTable_, sizeof(numberOfTable_));
+    inFile->read((char *)&description_, sizeof(description_));
+    
+}
+
+
+
+void cLutHeader::readLutTable(std::fstream* inFile)
+{
+    
+    cLutRecord* lutTableHeader_ = new cLutRecord[numberOfTable_];
+    
+    for (I32 i = 0; i < numberOfTable_; i++) {
+        
+        cLutRecord* tempLut = new cLutRecord;
+        tempLut->read(inFile);
+        tempLut->print();
+        tempLut->readLutArray(inFile);
+        
+        lutTableHeader_[i] = *tempLut;
+        
+    }
     
 }
 
@@ -263,5 +287,76 @@ void cLutHeader::read(std::fstream* inFile)
 
 void cLutHeader::print() const
 {
+    
+    std::cout << "Number of Lookup Table: " << numberOfTable_ <<  std::endl;
+    std::cout << "Description: " << description_ << std::endl;
+
+}
+
+
+
+cLutRecord::cLutRecord()
+{
+    
+}
+
+
+
+void cLutRecord::read(std::fstream* inFile)
+{
+    
+    inFile->read((char *)&size_, sizeof(size_));
+    inFile->read((char *)&reserved_, sizeof(reserved_));
+    inFile->read((char *)&numberOfEntries_, sizeof(numberOfEntries_));
+    inFile->read((char *)&unitOfMeasurement_, sizeof(unitOfMeasurement_));
+    inFile->read((char *)&dataType_, sizeof(dataType_));
+    inFile->read((char *)&options_, sizeof(options_));
+    inFile->read((char *)&compression_, sizeof(compression_));
+    inFile->read((char *)&description_, sizeof(description_));
+    
+}
+
+
+
+void cLutRecord::readLutArray(std::fstream* inFile)
+{
+    
+    F32 lLutTableArray_[numberOfEntries_];
+    inFile->read((char *)&lLutTableArray_, sizeof(lLutTableArray_));
+    
+    lutTableArray_ = lLutTableArray_;
+    
+    this->printLutArray();
+    
+}
+
+
+
+void cLutRecord::print() const
+{
+    
+    std::cout << "Number of entries: " << numberOfEntries_ << std::endl;
+    std::cout << "Unit of measurement: " << unitOfMeasurement_ << std::endl;
+    
+    if (dataType_ == 8) {std::cout << "Data type: 8 ('float')" << std::endl;};
+        
+    std::cout << "Description: " << description_ << std::endl;
+        
+}
+
+
+
+void cLutRecord::printLutArray() const
+{
+    
+    for(int i = 0; i < numberOfEntries_; i++)
+    {
+        if(i%10 != 0 || i == 0)
+            std::cout << lutTableArray_[i] << "\t\t";
+        else
+            std::cout << lutTableArray_[i]<< std::endl;
+    }
+    
+    std::cout << "" << std::endl;
     
 }
