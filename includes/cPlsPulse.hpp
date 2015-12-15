@@ -69,7 +69,8 @@ public:
     }
     
     I64 getNPulses();               // Return the number of pulse in the object
-    plsPulseRec getPulse(I64);      // Return a pulse record
+    plsPulseRec getPulse(I64) const;      // Return a pulse record
+    plsPulseRec* getPulseAddrs(I64);
     
 };
 

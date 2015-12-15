@@ -103,7 +103,15 @@ I64 plsPulseArray::getNPulses()
 
 
 //-----------------------------------------------------------------------------
-plsPulseRec plsPulseArray::getPulse(I64 index)
+plsPulseRec plsPulseArray::getPulse(I64 index) const
 {
     return plsPulseArr_[index];
+}
+
+
+
+//-----------------------------------------------------------------------------
+plsPulseRec* plsPulseArray::getPulseAddrs(I64 index)
+{
+    return &(plsPulseArr_[index]);
 }

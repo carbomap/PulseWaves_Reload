@@ -16,6 +16,7 @@ int main(int argc, const char * argv[]) {
     
     I64 tr = 4324;
     plsObj.printPulse(tr);
-    
+    plsPulseRec dum = plsObj.getPulse(tr);
+    plsPulseRec* dumAddrs = plsObj.getPulsePtr(tr);
 	return 0;
 }

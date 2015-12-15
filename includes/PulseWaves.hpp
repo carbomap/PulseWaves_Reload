@@ -84,7 +84,7 @@ public:
     cPlsHeader* getHeader();
     cVlrHeader* getVlr(I32);
     plsPulseRec getPulse(I64) const;
-    plsPulseRec* getPulse(I64);
+    plsPulseRec* getPulsePtr(I64);
     
     void printPulse(I64) const;
     void printPulses() const;
