@@ -252,22 +252,24 @@ cVlrHeader* PulseWaves::getVlr(I32 index)
 //-----------------------------------------------------------------------------
 plsPulseRec PulseWaves::getPulse(I64 index) const
 {
-    if (index <= plsHeader_->nPulses_) {
+    if (index >= plsHeader_->nPulses_) {
         std::cout << "Index outside the allowed range..." << std::endl;
     } else {
-        return plsPulseArr_->getPulse(index);
+        plsPulseRec retRec = plsPulseArr_->getPulse(index);
+        return retRec;
     }
 }
 
 
 
 //-----------------------------------------------------------------------------
-plsPulseRec* PulseWaves::getPulse(I64 index)
+plsPulseRec* PulseWaves::getPulsePtr(I64 index)
 {
     if (index <= plsHeader_->nPulses_) {
         std::cout << "Index outside the allowed range..." << std::endl;
     } else {
-        return &(plsPulseArr_->getPulse(index));
+        plsPulseRec* retRec = plsPulseArr_->getPulseAddrs(index);
+        return retRec;
     }
 
 }
