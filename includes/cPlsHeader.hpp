@@ -9,10 +9,17 @@
 #ifndef plsHeaderClass_hpp
 #define plsHeaderClass_hpp
 
+// C++
 #include <stdio.h>
 #include <fstream>
+
+// BOOST
 #include <boost/cstdint.hpp>
+
+// PulseWaves_Reload
 #include "PulseWavesDefs.hpp"
+
+
 
 #pragma pack(push, r1, 1)
 class cPlsHeader
