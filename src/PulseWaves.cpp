@@ -6,236 +6,222 @@
 //  Copyright © 2015 Carbomap. All rights reserved.
 //
 
-#include "../includes/PulseWaves.hpp"
+// C++
 #include <iostream>
+#include <fstream>
+
+// BOOST
 #include <boost/lexical_cast.hpp>
 #include <boost/variant.hpp>
-#include <map>
+//#include <boost/filesystem.hpp>
+//#include <boost/timer/timer.hpp>
 
-using namespace std;
+// PulseWaves_Reload
+#include "../includes/PulseWaves.hpp"
+#include "../includes/cGeoKey.hpp"
+#include "../includes/cVlr.hpp"
+#include "../includes/cPlsPulse.hpp"
+#include "../includes/cAVlr.hpp"
 
 
-//-----------------------------------------------------------
 
-PulseWaves::PulseWaves(string inFile)
+//-----------------------------------------------------------------------------
+PulseWaves::PulseWaves(std::string inFile)
 {
 	
+//    boost::timer::cpu_timer timer;
+    
     plsFilePath_ = inFile;
-	std::cout << "Opening " << plsFilePath_ << " file for read..." << std::endl;
-    std::cout << "" << std::endl;
-
-	plsHeader_ 	= new pls_header_strc;
-	plsPulserec_ = new pls_pulserec_strc;
-    wvsHeader_ 	= new wvs_header_strc;
+    // instantiation of the fstream class object
     
-    this->readHeader();
-	this->displayHeaderInformation();
+    std::fstream inPlsFile;
     
-    this->readVLR();
-    this->readData();
-    this->readAVLR();
+    inPlsFile_ = &inPlsFile;
 
-};
-
-
-//+---------------------------------------------------------+
-//|                                                         |
-//|                 Public Methods for Header               |
-//|                                                         |
-//+---------------------------------------------------------+
-void PulseWaves::displayHeaderInformation() const
-{
-
-    this->printSep();
+    inPlsFile_->open(plsFilePath_.c_str(), std::ios::in | std::ios::binary);
     
-	std::cout << "" << std::endl;
+    // checking if the file exist
+    if (inPlsFile_->fail())
+    {
+        
+        std::cout << "ERROR: Cannot open the file..." << std::endl;
+        exit(1);
+    
+    }
+    else
+    {
+        
+        printSep();
+        std::cout << "Reading header..." << std::endl;
+        this->readHeader();
+        
+        printSep();
+        std::cout << "Reading Variable Length Records..." << std::endl;
+        this->readVLR();
+        
+        printSep();
+        std::cout << "Reading Data Records..." << std::endl;
+        this->readData();
+        
+        printSep();
+        std::cout << "Reading Append Variable Length Record..." << std::endl;
+        this->readAVLR();
 
-	std::cout << "File signature:\t\t ";
-	for (int i = 0; i < 16; i++) {
-		std::cout << plsHeader_->fileSignature[i];
-	}
-	std::cout << std::endl;
-
-	std::cout << "Global Parameter:\t " << plsHeader_->globalParameter << std::endl;
-	std::cout << "File Source ID:\t\t " << plsHeader_->fileSourceID << std::endl;
-	std::cout << "GUID 01:\t\t\t " << plsHeader_->guid01 << std::endl;
-	std::cout << "GUID 02:\t\t\t " << plsHeader_->guid02 << std::endl;
-	std::cout << "GUID 03:\t\t\t " << plsHeader_->guid03 << std::endl;
-
-	std::cout << "GUID 04:\t\t\t ";
-	for (int i =0; i < 8; i++) {
-		std::cout << boost::lexical_cast<std::string>(plsHeader_->guid04[i]);
-	}
-	std::cout << std::endl;
-
-	std::cout << "System ID:\t\t\t ";
-	for (int i =0; i < 64; i++) {
-		std::cout << plsHeader_->systemID[i];
-	}
-	std::cout << std::endl;
-
-	std::cout << "Software ID:\t\t ";
-	for (int i =0; i < 64; i++) {
-		std::cout << plsHeader_->generatingSoftware[i];
-	}
-	std::cout << std::endl;
-
-
-	std::cout << "Day:\t\t\t\t " << plsHeader_->day << std::endl;
-	std::cout << "Year:\t\t\t\t " << plsHeader_->year << std::endl;
-	std::cout << "Header size:\t\t " << plsHeader_->headerSize << " Bytes" << std::endl;
-	std::cout << "Version Major:\t\t " << boost::lexical_cast<std::string>(plsHeader_->versionMajor) << std::endl;
-	std::cout << "Version Minor:\t\t " << boost::lexical_cast<std::string>(plsHeader_->versionMinor) << std::endl;
-	std::cout << "Header Size:\t\t " << plsHeader_->headerSize << std::endl;
-	std::cout << "Pulse Data Offet:\t " << plsHeader_->dataOffet << " Bytes" << std::endl;
-	std::cout << "Number of Pulses:\t " << plsHeader_->nPulses << std::endl;
-	std::cout << "Pulse Format:\t\t " << plsHeader_->pulseFormat << std::endl;
-	std::cout << "pulse Attributes:\t " << plsHeader_->pulseAttributes << std::endl;
-	std::cout << "pulse Size:\t\t\t " << plsHeader_->pulseSize << " Bytes" << std::endl;
-	if (plsHeader_->pulseCompression == 0){std::cout << "Pulses are NOT compressed..." << std::endl;} else {std::cout << "Pulses are compressed..." << std::endl;}
-	std::cout << "Number of VLR:\t\t " << plsHeader_->nVLR << std::endl;
-	std::cout << "Number of AVLR:\t\t " << plsHeader_->nAVLR << std::endl;
-	std::cout << "Time Scale/Offset:\t " << plsHeader_->scaleT << ", " << plsHeader_->offsetT << std::endl;
-	std::cout << "Min/Max Time:\t\t " << plsHeader_->minT << ", " << plsHeader_->maxT << std::endl;
-	std::cout << "Scale XYZ:\t\t\t " << plsHeader_->scaleX << ", " << plsHeader_->scaleY << ", " << plsHeader_->scaleZ << std::endl;
-	std::cout << "Offset XYZ:\t\t\t " << plsHeader_->offsetX << ", " << plsHeader_->offsetY << ", " << plsHeader_->offsetZ << std::endl;
-	std::cout << "Minimum XYZ:\t\t " << plsHeader_->minX << ", " << plsHeader_->minY << ", " << plsHeader_->minZ << std::endl;
-	std::cout << "Maximum XYZ:\t\t " << plsHeader_->maxX << ", " << plsHeader_->maxY << ", " << plsHeader_->maxZ << std::endl;
-
-	std::cout << "" << std::endl;
-
-}
-
-
-pls_header_strc PulseWaves::getPlsHeader() const {return *plsHeader_;}
-string PulseWaves::getSystemID() const {return boost::lexical_cast<std::string>(*plsHeader_->systemID);}
-string PulseWaves::getSoftwareID() const {return boost::lexical_cast<std::string>(*plsHeader_->generatingSoftware);}
-boost::uint16_t PulseWaves::getDay() const {return plsHeader_->day;}
-boost::uint16_t PulseWaves::getYear() const { return plsHeader_->year;}
-boost::uint8_t PulseWaves::getVersionMajor() const {return plsHeader_->versionMajor;}
-boost::uint8_t PulseWaves::getVersionMinor()const{return plsHeader_->versionMinor;}
-boost::uint16_t PulseWaves::getHeaderSize()const {return plsHeader_->headerSize;}
-boost::uint64_t PulseWaves::getOffsetToPulses()const{return plsHeader_->dataOffet;}
-boost::uint64_t PulseWaves::getNumbOfPulses()const{return plsHeader_->nPulses;}
-boost::uint32_t PulseWaves::getPulseFormat()const{return plsHeader_->pulseFormat;}
-boost::uint32_t PulseWaves::getPulseAttrib()const{return plsHeader_->pulseAttributes;}
-boost::uint32_t PulseWaves::getPulseSize()const{return plsHeader_->pulseSize;}
-boost::uint32_t PulseWaves::getPulseCompress()const{return plsHeader_->pulseCompression;}
-boost::uint32_t PulseWaves::getNumbOfVLR()const{return plsHeader_->nVLR;}
-boost::int32_t PulseWaves::getNumbOfAVLR()const{return plsHeader_->nAVLR;}
-double PulseWaves::getTimeScale()const{return plsHeader_->scaleT;}
-double PulseWaves::getTimeOffset()const{return plsHeader_->offsetT;}
-boost::uint64_t PulseWaves::getTimeMin()const{return plsHeader_->minT;}
-boost::uint64_t PulseWaves::getTMax()const{return plsHeader_->maxT;}
-double PulseWaves::getXScale()const{return plsHeader_->scaleX;}
-double PulseWaves::getYScale()const{return plsHeader_->scaleY;}
-double PulseWaves::getZScale()const{return plsHeader_->scaleZ;}
-double PulseWaves::getXOffset()const{return plsHeader_->offsetX;}
-double PulseWaves::getYOffset()const{return plsHeader_->offsetY;}
-double PulseWaves::getZOffset()const{return plsHeader_->offsetZ;}
-double PulseWaves::getXMin()const{return plsHeader_->minX;}
-double PulseWaves::getXMax()const{return plsHeader_->maxX;}
-double PulseWaves::getYMin()const{return plsHeader_->minY;}
-double PulseWaves::getYMax()const{return plsHeader_->maxY;}
-double PulseWaves::getZMin()const{return plsHeader_->minZ;}
-double PulseWaves::getZMax()const{return plsHeader_->maxZ;}
-
-
-
-//+---------------------------------------------------------+
-//|                                                         |
-//|                  Public Methods for VLR                 |
-//|                                                         |
-//+---------------------------------------------------------+
-
-
-
-// public methods for the data block
-
-
-
-//-----------------------------------------------------------
-// Private methods for reading the file
-void PulseWaves::printSep() const
-{
-    std::cout << "##################################################" << std::endl;
+    }
+    
+    inPlsFile_->close();
+    
+//    std::cout << timer.format() << '\n';
+    
 };
 
 
 
+//-----------------------------------------------------------------------------
+void PulseWaves::printSep()
+{
+    std::cout << "########################################################" << std::endl;
+};
+
+
+
+//-----------------------------------------------------------------------------
 void PulseWaves::readHeader()
 {
 
 	// getting header structure
-	pls_header_strc plsHeader;
+	cPlsHeader* plsHeader = new cPlsHeader;
+    plsHeader->read(inPlsFile_);
+    plsHeader->print();
 
-	// instantiation of the fstream class object
-	std::fstream plsFile;
-	plsFile.open(plsFilePath_.c_str(), std::ios::in | std::ios::binary);
-
-	// checking if the file exist
-	if (plsFile.fail())
-	{
-		std::cout << "ERROR: Cannot open the file..." << std::endl;
-		exit(1);
-	}
-
-	// reading the file into memory
-	plsFile.read((char *)&plsHeader, sizeof(plsHeader));
-
-	// closing file
-	plsFile.close();
-
-	// assigning the read structure into the object data member
-	//setPlsHeader();
-	*plsHeader_ = plsHeader;
-
+    plsHeader_ = plsHeader;
 
 };
 
 
+
+//-----------------------------------------------------------------------------
+// Method that reads the VLR and store them into an array
 void PulseWaves::readVLR()
 {
-    this->printSep();
-    
-    // Creating a map to hold the VLR header records
-    std::map<int, vlrHeader_strc> vlrHeaderMap;
-    // for testing just now
-    std::map<std::string, boost::variant<scanner_vlr_strc, pulseSampling_vlr_strc, lookUpTable_vlr_strc, lutRecord_vlr_strc, samplingRecord_strc> > vlrRecordMap ;
-    
-    // instantiation of the fstream class object
-    std::fstream plsFile;
-    plsFile.open(plsFilePath_.c_str(), std::ios::in | std::ios::binary);
-    
-    // pointing the cursor at the beginning of the VLR Block
-    plsFile.seekg(plsHeader_->headerSize, ios::beg);
 
-    vlr_header_strc vlsHeader;
+    cVlrHeader* vlrHeaderArr = new cVlrHeader[plsHeader_->nVLR_];
     
     // reading the VLR
-    for (int i = 0; i < plsHeader_->nVLR; i++) {
-        plsFile.read((char *)&vlsHeader, sizeof(vlsHeader));
+    for (int i = 0; i < plsHeader_->nVLR_; i++)
+    {
+        // getting the VLR ID record number
+        U32 recID = cVlrHeader::whichVLR(inPlsFile_);
+//        std::cout << "reckon recID: " << recID << std::endl;
         
-        vlrHeaderMap.insert ( std::pair<int,vlr_header_strc>(i,vlsHeader) );
+        // instantiate the correct VLR class
+        if (recID >= 34735 && recID <= 34757)
+        {
+            
+            printSep();
+            std::cout << "GeoKey descriptor found..." << std::endl;
+            cGeoKey tempGK(inPlsFile_, &recID);
+            vlrHeaderArr[i] = tempGK;
+            
+        }
+        else if (recID >= 100001 && recID < 100255)
+        {
+            
+            printSep();
+            std::cout << "Scanner descriptor found..." << std::endl;
+            
+            cVlrScanner* tempVlr = new cVlrScanner;
+            
+            tempVlr->cVlrHeader::read(inPlsFile_);
+            tempVlr->cVlrScanner::read(inPlsFile_);
+            
+            tempVlr->cVlrHeader::print();
+            printSep();
+            tempVlr->cVlrScanner::print();
+            
+            vlrHeaderArr[i] = *tempVlr;
+            
+        }
+        else if (recID >= 200001  && recID < 200255)
+        {
+            
+            printSep();
+            std::cout << "Pulse sampling descriptor found..." << std::endl;
+            
+            cVlrPulseSampling* tempVlr = new cVlrPulseSampling;
+            tempVlr->cVlrHeader::read(inPlsFile_);
+            tempVlr->cVlrHeader::print();
+            printSep();
+            
+            tempVlr->cVlrPulseSampling::read(inPlsFile_);
+            tempVlr->cVlrPulseSampling::print();
+            printSep();
+            
+            tempVlr->cVlrPulseSampling::read_SamplingRecords(inPlsFile_);
+            
+            vlrHeaderArr[i] = *tempVlr;
+            
+        }
+        else if (recID >= 300001 && recID < 300255)
+        {
+            printSep();
+            std::cout << "Lookup Table descriptor found..." << std::endl;
+            
+            cLutHeader* tempVlr = new cLutHeader;
+            tempVlr->cVlrHeader::read(inPlsFile_);
+            tempVlr->read(inPlsFile_);
+            tempVlr->readLutTable(inPlsFile_);
+            
+            vlrHeaderArr[i] = *tempVlr;
+            
+        }
+        else
+        {
+            printSep();
+            std::cout << "Generic VLR descriptor found..." << std::endl;
+            std::cout << "VLR #" << recID << std::endl;
+            
+            cVlrHeader* tempVlr = new cVlrHeader;
+            tempVlr->cVlrHeader::read(inPlsFile_);
+            inPlsFile_->seekg(tempVlr->recordLengthAfterHeader_, std::ios::cur);
+            
+            vlrHeaderArr[i] = *tempVlr;
+        }
         
-        // for the time being as no actual VLR record is read, just jump to the next vlr Header
-        plsFile.seekg(vlsHeader.recordLengthAfterHeader, ios::cur);
+        
         
     }
     
-    // Closing the file pointer
-    plsFile.close();
+    plsVlrArr_ = vlrHeaderArr;
     
 };
 
 
+
+//-----------------------------------------------------------------------------
 void PulseWaves::readData()
 {
 
+    plsPulseArray* plsPulseArr_ = new plsPulseArray(inPlsFile_, plsHeader_);
+    
 };
 
 
+
+//-----------------------------------------------------------------------------
 void PulseWaves::readAVLR()
 {
-
+    
+    if (plsHeader_->nAVLR_ == 0) {
+        std::cout << "No AVLR in the file, nothing to read..." << std::endl;
+    } else {
+        std::cout << "The file contains " << plsHeader_->nAVLR_ << " Append Variable Lenght Record" << std::endl;
+        inPlsFile_->seekg(0, std::ios::end);
+        cAVlrHeader* tempAVlr = new cAVlrHeader;
+        tempAVlr->read(inPlsFile_);
+        tempAVlr->print();
+        plsAVlrArr_ = tempAVlr;
+        tempAVlr = 0;
+        }
+    
 };
