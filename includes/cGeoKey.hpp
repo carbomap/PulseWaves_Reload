@@ -7,7 +7,7 @@
  
  PURPOSE:
  
- Class for the GeoKey
+ Headers for the GeoKey related (cGeoKey, cGeoKeyDir, cGeoKeyDir_subKey, cGeoKeyDblPrm, cGeoKeyAscii) classes.
  
  COPYRIGHT:
  
@@ -26,7 +26,7 @@
  
  HISTORY:
  
- 11/12/2015 - Creation
+ 11/12/2015 - Creation by Antoine C.
  
  -----------------------------------------------------------------------------
  */

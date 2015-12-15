@@ -1,10 +1,33 @@
-//
-//  PulseWaves.cpp
-//  PulseWaves_Reload
-//
-//  Created by Antoine Cottin on 01/12/2015.
-//  Copyright © 2015 Carbomap. All rights reserved.
-//
+/*
+ -----------------------------------------------------------------------------
+ 
+ FILE NAME:
+ 
+ PulseWaves.cpp
+ 
+ PURPOSE:
+ 
+ Implementation of the PulseWaves class.
+ 
+ COPYRIGHT:
+ 
+ (c) Antoine Cottin, Carbomap Ltd. - 12/2015
+ 
+ This is free software; you can redistribute and/or modify it under the
+ terms of the GNU Lesser General Licence as published by the Free Software
+ Foundation. See the COPYING file for more information.
+ 
+ This software is distributed WITHOUT ANY WARRANTY and without even the
+ implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ 
+ AUTHOR:
+ 
+ a.cottin@carbomap.com  -  http://www.carbomap.com
+ 
+ -----------------------------------------------------------------------------
+ */
+
+
 
 // C++
 #include <iostream>

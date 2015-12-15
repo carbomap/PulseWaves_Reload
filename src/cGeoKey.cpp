@@ -7,7 +7,7 @@
  
  PURPOSE:
  
- Class for the GeoKey
+ Implementation of the GeoKey related (cGeoKey, cGeoKeyDir, cGeoKeyDir_subKey, cGeoKeyDblPrm, cGeoKeyAscii) classes.
  
  COPYRIGHT:
  
