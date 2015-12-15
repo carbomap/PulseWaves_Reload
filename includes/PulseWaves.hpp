@@ -62,22 +62,34 @@ class PulseWaves
 	void readData();
 	void readAVLR();
 
-
 public:
 
 	// Default constructor
 	PulseWaves(std::string);
-	// Default destructor
+	
+    // Default destructor
     ~PulseWaves()
     {
+        
         inPlsFile_ = 0;
         plsHeader_ = 0;
         plsVlrArr_ = 0;
         plsPulseArr_ = 0;
         plsAVlrArr_ = 0;
+        
     };
 
     static void printSep();
+    
+    cPlsHeader* getHeader();
+    cVlrHeader* getVlr(I32);
+    plsPulseRec getPulse(I64) const;
+    plsPulseRec* getPulse(I64);
+    
+    void printPulse(I64) const;
+    void printPulses() const;
+    
+
     
 };
 
