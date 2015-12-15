@@ -1,15 +1,43 @@
-//
-//  cGeoKey.cpp
-//  Project
-//
-//  Created by Antoine Cottin on 11/12/2015.
-//
-//
+/*
+ -----------------------------------------------------------------------------
+ 
+ FILE NAME:
+ 
+ cGeoKey.cpp
+ 
+ PURPOSE:
+ 
+ Implementation of the GeoKey related (cGeoKey, cGeoKeyDir, cGeoKeyDir_subKey, cGeoKeyDblPrm, cGeoKeyAscii) classes.
+ 
+ COPYRIGHT:
+ 
+ (c) Antoine Cottin, Carbomap Ltd. - 12/2015
+ 
+ This is free software; you can redistribute and/or modify it under the
+ terms of the GNU Lesser General Licence as published by the Free Software
+ Foundation. See the COPYING file for more information.
+ 
+ This software is distributed WITHOUT ANY WARRANTY and without even the
+ implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ 
+ AUTHOR:
+ 
+ a.cottin@carbomap.com  -  http://www.carbomap.com
+ 
+ -----------------------------------------------------------------------------
+ */
 
-#include "../includes/cGeoKey.hpp"
+
+
+// C++
 #include <iostream>
 #include <vector>
+
+// BOOST
 #include <boost/lexical_cast.hpp>
+
+// PulseWaves_Reload
+#include "../includes/cGeoKey.hpp"
 #include "../includes/PulseWavesDefs.hpp"
 
 
