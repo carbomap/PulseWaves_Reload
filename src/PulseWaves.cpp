@@ -6,21 +6,31 @@
 //  Copyright © 2015 Carbomap. All rights reserved.
 //
 
-#include "../includes/PulseWaves.hpp"
+// C++
 #include <iostream>
 #include <fstream>
+
+// BOOST
 #include <boost/lexical_cast.hpp>
 #include <boost/variant.hpp>
+//#include <boost/filesystem.hpp>
+//#include <boost/timer/timer.hpp>
+
+// PulseWaves_Reload
+#include "../includes/PulseWaves.hpp"
 #include "../includes/cGeoKey.hpp"
 #include "../includes/cVlr.hpp"
+#include "../includes/cPlsPulse.hpp"
+#include "../includes/cAVlr.hpp"
 
 
-//-----------------------------------------------------------
 
+//-----------------------------------------------------------------------------
 PulseWaves::PulseWaves(std::string inFile)
 {
 	
-    
+//    boost::timer::cpu_timer timer;
+
     plsFilePath_ = inFile;
     // instantiation of the fstream class object
     
@@ -41,12 +51,19 @@ PulseWaves::PulseWaves(std::string inFile)
     else
     {
         
+        printSep();
         std::cout << "Reading header..." << std::endl;
         this->readHeader();
+        
+        printSep();
         std::cout << "Reading Variable Length Records..." << std::endl;
         this->readVLR();
+        
+        printSep();
         std::cout << "Reading Data Records..." << std::endl;
         this->readData();
+        
+        printSep();
         std::cout << "Reading Append Variable Length Record..." << std::endl;
         this->readAVLR();
 
@@ -54,23 +71,21 @@ PulseWaves::PulseWaves(std::string inFile)
     
     inPlsFile_->close();
     
+//    std::cout << timer.format() << '\n';
     
 };
 
 
 
-
-
-
-//-----------------------------------------------------------
-// Private methods for reading the file
-void PulseWaves::printSep() const
+//-----------------------------------------------------------------------------
+void PulseWaves::printSep()
 {
     std::cout << "########################################################" << std::endl;
 };
 
 
 
+//-----------------------------------------------------------------------------
 void PulseWaves::readHeader()
 {
 
@@ -84,21 +99,20 @@ void PulseWaves::readHeader()
 };
 
 
+
+//-----------------------------------------------------------------------------
 // Method that reads the VLR and store them into an array
-// Note that for the moment there is a little bug on the storage as
-// the GeoKeyHeader is not properly stored !!!
-// This needs some fixing.
 void PulseWaves::readVLR()
 {
 
     cVlrHeader* vlrHeaderArr = new cVlrHeader[plsHeader_->nVLR_];
     
     // reading the VLR
-    for (int i = 0; i < plsHeader_->nVLR_; i++)
+    for (U32 i = 0; i < plsHeader_->nVLR_; i++)
     {
         // getting the VLR ID record number
         U32 recID = cVlrHeader::whichVLR(inPlsFile_);
-        std::cout << "reckon recID: " << recID << std::endl;
+//        std::cout << "reckon recID: " << recID << std::endl;
         
         // instantiate the correct VLR class
         if (recID >= 34735 && recID <= 34757)
@@ -145,6 +159,8 @@ void PulseWaves::readVLR()
             
             tempVlr->cVlrPulseSampling::read_SamplingRecords(inPlsFile_);
             
+            vlrHeaderArr[i] = *tempVlr;
+            
         }
         else if (recID >= 300001 && recID < 300255)
         {
@@ -156,6 +172,8 @@ void PulseWaves::readVLR()
             tempVlr->read(inPlsFile_);
             tempVlr->readLutTable(inPlsFile_);
             
+            vlrHeaderArr[i] = *tempVlr;
+            
         }
         else
         {
@@ -166,24 +184,113 @@ void PulseWaves::readVLR()
             cVlrHeader* tempVlr = new cVlrHeader;
             tempVlr->cVlrHeader::read(inPlsFile_);
             inPlsFile_->seekg(tempVlr->recordLengthAfterHeader_, std::ios::cur);
+            
+            vlrHeaderArr[i] = *tempVlr;
         }
         
         
         
     }
     
-    plsVlrArr_  = vlrHeaderArr;
+    plsVlrArr_ = vlrHeaderArr;
     
 };
 
 
+
+//-----------------------------------------------------------------------------
 void PulseWaves::readData()
 {
 
+    plsPulseArray* plsPlsArr_ = new plsPulseArray(inPlsFile_, plsHeader_);
+    plsPulseArr_ = plsPlsArr_;
+    
 };
 
 
+
+//-----------------------------------------------------------------------------
 void PulseWaves::readAVLR()
 {
-
+    
+    if (plsHeader_->nAVLR_ == 0) {
+        std::cout << "No AVLR in the file, nothing to read..." << std::endl;
+    } else {
+        std::cout << "The file contains " << plsHeader_->nAVLR_ << " Append Variable Lenght Record" << std::endl;
+        inPlsFile_->seekg(0, std::ios::end);
+        cAVlrHeader* tempAVlr = new cAVlrHeader;
+        tempAVlr->read(inPlsFile_);
+        tempAVlr->print();
+        plsAVlrArr_ = tempAVlr;
+        tempAVlr = 0;
+        }
+    
 };
+
+
+
+//-----------------------------------------------------------------------------
+cPlsHeader* PulseWaves::getHeader()
+{
+    return plsHeader_;
+}
+
+
+
+//-----------------------------------------------------------------------------
+cVlrHeader* PulseWaves::getVlr(I32 index)
+{
+    if (index <= plsHeader_->nVLR_) {
+        std::cout << "Index outside the allowed range..." << std::endl;
+    } else {
+        return &plsVlrArr_[index];
+    }
+}
+
+
+
+//-----------------------------------------------------------------------------
+plsPulseRec PulseWaves::getPulse(I64 index) const
+{
+    if (index <= plsHeader_->nPulses_) {
+        std::cout << "Index outside the allowed range..." << std::endl;
+    } else {
+        return plsPulseArr_->getPulse(index);
+    }
+}
+
+
+
+//-----------------------------------------------------------------------------
+plsPulseRec* PulseWaves::getPulse(I64 index)
+{
+    if (index <= plsHeader_->nPulses_) {
+        std::cout << "Index outside the allowed range..." << std::endl;
+    } else {
+        return &(plsPulseArr_->getPulse(index));
+    }
+
+}
+
+
+
+//-----------------------------------------------------------------------------
+void PulseWaves::printPulse(I64 index) const
+{
+    
+    if (index >= plsHeader_->nPulses_) {
+        std::cout << "Index outside allowed range..." << std::endl;
+    } else { plsPulseArr_->getPulse(index).print();}
+    
+}
+
+
+
+//-----------------------------------------------------------------------------
+void PulseWaves::printPulses() const
+{
+    
+    for (I64 i = 0; i < plsHeader_->nPulses_; i++) {
+        (plsPulseArr_->getPulse(i)).print();
+    }
+}

@@ -12,11 +12,17 @@
 #include <fstream>
 #include <boost/lexical_cast.hpp>
 
+
+
+//-----------------------------------------------------------------------------
 cPlsHeader::cPlsHeader()
 {
     
 }
 
+
+
+//-----------------------------------------------------------------------------
 void cPlsHeader::read(std::fstream* plsInFile)
 {
     
@@ -66,6 +72,7 @@ void cPlsHeader::read(std::fstream* plsInFile)
 
 
 
+//-----------------------------------------------------------------------------
 void cPlsHeader::print() const
 {
     
@@ -127,6 +134,9 @@ void cPlsHeader::print() const
     
 }
 
+
+
+//-----------------------------------------------------------------------------
 void cPlsHeader::write() const
 {
     

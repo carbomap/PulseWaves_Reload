@@ -14,6 +14,7 @@
 #include <fstream>
 #include <vector>
 #include "PulseWavesDefs.hpp"
+#include "cPlsHeader.hpp"
 
 
 
@@ -56,10 +57,11 @@ private:
     
     I64             nPulses_;
     plsPulseRec*    plsPulseArr_;      // Pointer to an plsPulseRec array - which will hold part or all the records
+    cPlsHeader*     pPlsHeader_;       // Pointer to the file header
     
 public:
     
-    plsPulseArray(std::fstream*);      // Default Constructor that loads all the records of the file
+    plsPulseArray(std::fstream*, cPlsHeader*);      // Default Constructor that loads all the records of the file
     plsPulseArray(std::fstream*, std::vector<I64>);   // Constructor that takes an array of index
     ~plsPulseArray()                   // Default Constructor
     {

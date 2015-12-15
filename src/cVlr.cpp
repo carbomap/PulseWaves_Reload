@@ -10,6 +10,7 @@
 #include <boost/lexical_cast.hpp>
 
 
+//-----------------------------------------------------------------------------
 cVlrHeader::cVlrHeader()
 {
     
@@ -17,6 +18,7 @@ cVlrHeader::cVlrHeader()
 
 
 
+//-----------------------------------------------------------------------------
 void cVlrHeader::read(std::fstream* inFile)
 {
     
@@ -30,6 +32,7 @@ void cVlrHeader::read(std::fstream* inFile)
 
 
 
+//-----------------------------------------------------------------------------
 void cVlrHeader::print() const
 {
     
@@ -41,12 +44,16 @@ void cVlrHeader::print() const
 }
 
 
+
+//-----------------------------------------------------------------------------
 cVlrScanner::cVlrScanner()
 {
     
 }
 
 
+
+//-----------------------------------------------------------------------------
 void cVlrScanner::read(std::fstream* inFile)
 {
     
@@ -70,6 +77,9 @@ void cVlrScanner::read(std::fstream* inFile)
 
 }
 
+
+
+//-----------------------------------------------------------------------------
 void cVlrScanner::print() const
 {
     
@@ -116,6 +126,7 @@ void cVlrScanner::print() const
 
 
 
+//-----------------------------------------------------------------------------
 cVlrSamplingRecord::cVlrSamplingRecord()
 {
     
@@ -123,6 +134,7 @@ cVlrSamplingRecord::cVlrSamplingRecord()
 
 
 
+//-----------------------------------------------------------------------------
 void cVlrSamplingRecord::read(std::fstream* inFile)
 {
     
@@ -148,6 +160,7 @@ void cVlrSamplingRecord::read(std::fstream* inFile)
 
 
 
+//-----------------------------------------------------------------------------
 void cVlrSamplingRecord::print() const
 {
     
@@ -178,6 +191,7 @@ void cVlrSamplingRecord::print() const
 
 
 
+//-----------------------------------------------------------------------------
 cVlrPulseSampling::cVlrPulseSampling()
 {
     
@@ -185,6 +199,7 @@ cVlrPulseSampling::cVlrPulseSampling()
 
 
 
+//-----------------------------------------------------------------------------
 void cVlrPulseSampling::read(std::fstream* inFile)
 {
     
@@ -202,6 +217,7 @@ void cVlrPulseSampling::read(std::fstream* inFile)
 
 
 
+//-----------------------------------------------------------------------------
 void cVlrPulseSampling::print() const
 {
     
@@ -229,6 +245,7 @@ void cVlrPulseSampling::print() const
 
 
 
+//-----------------------------------------------------------------------------
 void cVlrPulseSampling::read_SamplingRecords(std::fstream* inFile)
 {
     
@@ -239,6 +256,7 @@ void cVlrPulseSampling::read_SamplingRecords(std::fstream* inFile)
         cVlrSamplingRecord* tempSamplingRecord = new cVlrSamplingRecord;
         tempSamplingRecord->read(inFile);
         tempSamplingRecord->print();
+
         std::cout << "########################################################" << std::endl;
 
         samplingRecordArr_[w] = *tempSamplingRecord;
@@ -248,11 +266,15 @@ void cVlrPulseSampling::read_SamplingRecords(std::fstream* inFile)
 }
 
 
+
+//-----------------------------------------------------------------------------
 cLutHeader::cLutHeader() : cVlrHeader()
 {
 }
 
 
+
+//-----------------------------------------------------------------------------
 void cLutHeader::read(std::fstream* inFile)
 {
     
@@ -265,6 +287,7 @@ void cLutHeader::read(std::fstream* inFile)
 
 
 
+//-----------------------------------------------------------------------------
 void cLutHeader::readLutTable(std::fstream* inFile)
 {
     
@@ -285,6 +308,7 @@ void cLutHeader::readLutTable(std::fstream* inFile)
 
 
 
+//-----------------------------------------------------------------------------
 void cLutHeader::print() const
 {
     
@@ -295,6 +319,7 @@ void cLutHeader::print() const
 
 
 
+//-----------------------------------------------------------------------------
 cLutRecord::cLutRecord()
 {
     
@@ -302,6 +327,7 @@ cLutRecord::cLutRecord()
 
 
 
+//-----------------------------------------------------------------------------
 void cLutRecord::read(std::fstream* inFile)
 {
     
@@ -318,6 +344,7 @@ void cLutRecord::read(std::fstream* inFile)
 
 
 
+//-----------------------------------------------------------------------------
 void cLutRecord::readLutArray(std::fstream* inFile)
 {
     
@@ -332,6 +359,7 @@ void cLutRecord::readLutArray(std::fstream* inFile)
 
 
 
+//-----------------------------------------------------------------------------
 void cLutRecord::print() const
 {
     
@@ -346,6 +374,7 @@ void cLutRecord::print() const
 
 
 
+//-----------------------------------------------------------------------------
 void cLutRecord::printLutArray() const
 {
     

@@ -12,6 +12,9 @@
 #include <boost/lexical_cast.hpp>
 #include "../includes/PulseWavesDefs.hpp"
 
+
+
+//-----------------------------------------------------------------------------
 cGeoKey::cGeoKey(std::fstream* inFile, U32* recID) : cVlrHeader()
 {
 
@@ -50,13 +53,13 @@ cGeoKey::cGeoKey(std::fstream* inFile, U32* recID) : cVlrHeader()
         cGeoKeyAC_->read(inFile);
         cGeoKeyAC_->print();
         
-
-        
     }
 
 }
 
 
+
+//-----------------------------------------------------------------------------
 void cGeoKey::read(std::fstream* inFile)
 {
     
@@ -64,6 +67,7 @@ void cGeoKey::read(std::fstream* inFile)
 
 
 
+//-----------------------------------------------------------------------------
 void cGeoKey::print() const
 {
     
@@ -71,7 +75,7 @@ void cGeoKey::print() const
 
 
 
-
+//-----------------------------------------------------------------------------
 cGeoKeyDir::cGeoKeyDir()
 {
     
@@ -79,6 +83,7 @@ cGeoKeyDir::cGeoKeyDir()
 
 
 
+//-----------------------------------------------------------------------------
 void cGeoKeyDir::read(std::fstream* inFile)
 {
     
@@ -91,6 +96,7 @@ void cGeoKeyDir::read(std::fstream* inFile)
 
 
 
+//-----------------------------------------------------------------------------
 void cGeoKeyDir::readGeoKeySubDir(std::fstream* inFile)
 {
     
@@ -116,6 +122,7 @@ void cGeoKeyDir::readGeoKeySubDir(std::fstream* inFile)
 
 
 
+//-----------------------------------------------------------------------------
 void cGeoKeyDir::print() const
 {
     std::cout << "geoKey directory version: " << gKeyDirectoryVersion_ << std::endl;
@@ -127,6 +134,7 @@ void cGeoKeyDir::print() const
 
 
 
+//-----------------------------------------------------------------------------
 cGeoKeyDir_subKey::cGeoKeyDir_subKey()
 {
 
@@ -135,6 +143,7 @@ cGeoKeyDir_subKey::cGeoKeyDir_subKey()
 
 
 
+//-----------------------------------------------------------------------------
 void cGeoKeyDir_subKey::read(std::fstream* inFile)
 {
     
@@ -147,6 +156,7 @@ void cGeoKeyDir_subKey::read(std::fstream* inFile)
 
 
 
+//-----------------------------------------------------------------------------
 void cGeoKeyDir_subKey::print() const
 {
     
@@ -158,6 +168,7 @@ void cGeoKeyDir_subKey::print() const
 
 
 
+//-----------------------------------------------------------------------------
 cGeoKeyDblPrm::cGeoKeyDblPrm() : cVlrHeader()
 {
     
@@ -165,6 +176,7 @@ cGeoKeyDblPrm::cGeoKeyDblPrm() : cVlrHeader()
 
 
 
+//-----------------------------------------------------------------------------
 void cGeoKeyDblPrm::read(std::fstream* inFile)
 {
  
@@ -177,6 +189,7 @@ void cGeoKeyDblPrm::read(std::fstream* inFile)
 
 
 
+//-----------------------------------------------------------------------------
 void cGeoKeyDblPrm::print() const
 {
     for (int z = 0; z < (this->cVlrHeader::recordLengthAfterHeader_ / 8); z++) {
@@ -192,6 +205,7 @@ void cGeoKeyDblPrm::print() const
 
 
 
+//-----------------------------------------------------------------------------
 cGeoKeyAscii::cGeoKeyAscii()
 {
     
@@ -199,6 +213,7 @@ cGeoKeyAscii::cGeoKeyAscii()
 
 
 
+//-----------------------------------------------------------------------------
 void cGeoKeyAscii::read(std::fstream* inFile)
 {
     
@@ -233,9 +248,9 @@ void cGeoKeyAscii::read(std::fstream* inFile)
 
 
 
+//-----------------------------------------------------------------------------
 void cGeoKeyAscii::print() const
 {
-
 
         std::cout << vecArr_ << std::endl;
     

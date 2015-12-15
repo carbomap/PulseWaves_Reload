@@ -19,53 +19,24 @@
 #include "cVlr.hpp"
 #include "cPlsHeader.hpp"
 #include "cGeoKey.hpp"
+#include "cPlsPulse.hpp"
+#include "cAVlr.hpp"
 
 
 //#pragma pack(push, r1, 1)
-//struct wvs_header_strc{
-//	boost::int8_t       signature[16];
-//	boost::uint32_t     compression;
-//    boost::uint8_t      reserve[44];
-//};
-//#pragma pack(pop, r1)
-
-
+//class cWvsHeader
+//{
+//public:
 //
+//	I8      signature[16];
+//	U32     compression;
+//  U8      reserve[44];
 //
-//#pragma pack(push, r1, 1)
-//struct avlr_header_strc{
-//    boost::int8_t       userID[PLS_USER_ID_SIZE];
-//    boost::uint32_t     recordID;
-//    boost::uint32_t     reserved;
-//    boost::int64_t      recordLengthBeforeFooter;
-//    boost::int8_t       description[PLS_DESCRIPTION_SIZE];
-//};
-//#pragma pack(pop, r1)
-
+//cWvsHeader();
+//~cWvsHeader();
 //
-//
-//// The Look-Up Table VLR descriptor - 300,001 <= Record ID < 300,255
-//#pragma pack(push, r1, 1)
-//struct lookUpTable_vlr_strc{
-//    boost::uint32_t     size;
-//    boost::uint32_t     reserved;
-//    boost::uint32_t     numberOfTable;
-//    boost::int8_t       description[PLS_DESCRIPTION_SIZE];
-//};
-//#pragma pack(pop, r1)
-//
-//
-//// The Look-Up Table Record VLR descriptor
-//#pragma pack(push, r1, 1)
-//struct lutRecord_vlr_strc{
-//    boost::uint32_t     size;
-//    boost::uint32_t     reserved;
-//    boost::uint32_t     numberOfEntries;
-//    boost::uint16_t     unitOfMeasurement;
-//    boost::uint8_t      dataType;
-//    boost::uint8_t      options;
-//    boost::uint32_t     compression;
-//    boost::int8_t       description[PLS_DESCRIPTION_SIZE];
+//void read(std::fstream*);
+//void print() const;
 //};
 //#pragma pack(pop, r1)
 
@@ -79,30 +50,47 @@ class PulseWaves
     std::string plsFilePath_;       // String representing the fully qualified PLS file name path
 	std::string wvsFilePath_;       // String representing the fully qualified WVS file name path
     std::fstream* inPlsFile_;       // fstream pointer to the pls file
-    cPlsHeader* plsHeader_;     // Pointer to an instance of the PLS HEADER file
-    cVlrHeader* plsVlrArr_;     // pointer to an array of VLR objects
-    cGeoKey* cGeoKeyArr_;       // Pointer to an array of GeoKey object
+    cPlsHeader* plsHeader_;         // Pointer to an instance of the PLS HEADER file
+    cVlrHeader* plsVlrArr_;         // pointer to an array of VLR objects
+    plsPulseArray* plsPulseArr_;    // Pointer to the Pulse Array
+    cAVlrHeader* plsAVlrArr_;       // Pointer to an array that holds the AVLR records
     
 	// Private methods for reading the file
-    void printSep() const;
+    
     void readHeader();
 	void readVLR();
 	void readData();
 	void readAVLR();
 
-
 public:
 
 	// Default constructor
 	PulseWaves(std::string);
-	// Default destructor
+	
+    // Default destructor
     ~PulseWaves()
     {
+        
         inPlsFile_ = 0;
         plsHeader_ = 0;
+        plsVlrArr_ = 0;
+        plsPulseArr_ = 0;
+        plsAVlrArr_ = 0;
+        
     };
 
+    static void printSep();
+    
+    cPlsHeader* getHeader();
+    cVlrHeader* getVlr(I32);
+    plsPulseRec getPulse(I64) const;
+    plsPulseRec* getPulse(I64);
+    
+    void printPulse(I64) const;
+    void printPulses() const;
+    
 
+    
 };
 
 #endif /* PulseWaves_hpp */
