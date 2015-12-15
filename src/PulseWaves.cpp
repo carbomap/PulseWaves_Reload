@@ -13,8 +13,8 @@
 // BOOST
 #include <boost/lexical_cast.hpp>
 #include <boost/variant.hpp>
-//#include <boost/filesystem.hpp>
-//#include <boost/timer/timer.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/timer/timer.hpp>
 
 // PulseWaves_Reload
 #include "../includes/PulseWaves.hpp"
@@ -29,7 +29,7 @@
 PulseWaves::PulseWaves(std::string inFile)
 {
 	
-//    boost::timer::cpu_timer timer;
+    boost::timer::cpu_timer timer;
 
     plsFilePath_ = inFile;
     // instantiation of the fstream class object
@@ -71,7 +71,7 @@ PulseWaves::PulseWaves(std::string inFile)
     
     inPlsFile_->close();
     
-//    std::cout << timer.format() << '\n';
+    std::cout << timer.format() << '\n';
     
 };
 
