@@ -1,5 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6 FATAL_ERROR)
-FIND_PACKAGE(Boost)
+FIND_PACKAGE(Boost COMPONENTS system filesystem timer REQUIRED)
 set(PULSEWAVES_INCLUDES_DIR ${PROJECT_SOURCE_DIR}/includes)
 include_directories( ${Boost_INCLUDE_DIRS} ) 
 include_directories( ${PULSEWAVES_INCLUDES_DIR} )

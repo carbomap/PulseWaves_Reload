@@ -30,7 +30,7 @@ PulseWaves::PulseWaves(std::string inFile)
 {
 	
 //    boost::timer::cpu_timer timer;
-    
+
     plsFilePath_ = inFile;
     // instantiation of the fstream class object
     
@@ -108,7 +108,7 @@ void PulseWaves::readVLR()
     cVlrHeader* vlrHeaderArr = new cVlrHeader[plsHeader_->nVLR_];
     
     // reading the VLR
-    for (int i = 0; i < plsHeader_->nVLR_; i++)
+    for (U32 i = 0; i < plsHeader_->nVLR_; i++)
     {
         // getting the VLR ID record number
         U32 recID = cVlrHeader::whichVLR(inPlsFile_);
@@ -202,7 +202,8 @@ void PulseWaves::readVLR()
 void PulseWaves::readData()
 {
 
-    plsPulseArray* plsPulseArr_ = new plsPulseArray(inPlsFile_, plsHeader_);
+    plsPulseArray* plsPlsArr_ = new plsPulseArray(inPlsFile_, plsHeader_);
+    plsPulseArr_ = plsPlsArr_;
     
 };
 
@@ -225,3 +226,71 @@ void PulseWaves::readAVLR()
         }
     
 };
+
+
+
+//-----------------------------------------------------------------------------
+cPlsHeader* PulseWaves::getHeader()
+{
+    return plsHeader_;
+}
+
+
+
+//-----------------------------------------------------------------------------
+cVlrHeader* PulseWaves::getVlr(I32 index)
+{
+    if (index <= plsHeader_->nVLR_) {
+        std::cout << "Index outside the allowed range..." << std::endl;
+    } else {
+        return &plsVlrArr_[index];
+    }
+}
+
+
+
+//-----------------------------------------------------------------------------
+plsPulseRec PulseWaves::getPulse(I64 index) const
+{
+    if (index <= plsHeader_->nPulses_) {
+        std::cout << "Index outside the allowed range..." << std::endl;
+    } else {
+        return plsPulseArr_->getPulse(index);
+    }
+}
+
+
+
+//-----------------------------------------------------------------------------
+plsPulseRec* PulseWaves::getPulse(I64 index)
+{
+    if (index <= plsHeader_->nPulses_) {
+        std::cout << "Index outside the allowed range..." << std::endl;
+    } else {
+        return &(plsPulseArr_->getPulse(index));
+    }
+
+}
+
+
+
+//-----------------------------------------------------------------------------
+void PulseWaves::printPulse(I64 index) const
+{
+    
+    if (index >= plsHeader_->nPulses_) {
+        std::cout << "Index outside allowed range..." << std::endl;
+    } else { plsPulseArr_->getPulse(index).print();}
+    
+}
+
+
+
+//-----------------------------------------------------------------------------
+void PulseWaves::printPulses() const
+{
+    
+    for (I64 i = 0; i < plsHeader_->nPulses_; i++) {
+        (plsPulseArr_->getPulse(i)).print();
+    }
+}

@@ -69,16 +69,19 @@ plsPulseArray::plsPulseArray(std::fstream* inFile, cPlsHeader* pPlsHeader)
     // Assigning the header pointer to the data member
     pPlsHeader_ = pPlsHeader;
     nPulses_ = pPlsHeader->nPulses_;
-    plsPulseRec* plsPulseArr_ = new plsPulseRec[pPlsHeader_->nPulses_];
+    plsPulseRec* tempPlsPulseArr = new plsPulseRec[pPlsHeader_->nPulses_];
     
     std::cout << "Reading " << pPlsHeader->nPulses_ << " pulse records" << std::endl;
     
     for (I64 i = 0; i < nPulses_; i++) {
         plsPulseRec* tempPulse = new plsPulseRec;
         tempPulse->read(inFile);
-        plsPulseArr_[i] = *tempPulse;
+        tempPlsPulseArr[i] = *tempPulse;
+        tempPulse = 0;
     }
     
+    plsPulseArr_ = tempPlsPulseArr;
+    tempPlsPulseArr = 0;
 }
 
 
