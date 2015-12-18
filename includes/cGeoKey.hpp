@@ -1,10 +1,37 @@
-//
-//  cGeoKey.hpp
-//  Project
-//
-//  Created by Antoine Cottin on 11/12/2015.
-//
-//
+/*
+ -----------------------------------------------------------------------------
+ 
+ FILE NAME:
+ 
+ cGeoKey.hpp
+ 
+ PURPOSE:
+ 
+ Headers for the GeoKey related (cGeoKey, cGeoKeyDir, cGeoKeyDir_subKey, cGeoKeyDblPrm, cGeoKeyAscii) classes.
+ 
+ COPYRIGHT:
+ 
+ (c) Antoine Cottin, Carbomap Ltd. - 12/2015
+ 
+ This is free software; you can redistribute and/or modify it under the
+ terms of the GNU Lesser General Licence as published by the Free Software
+ Foundation. See the COPYING file for more information.
+ 
+ This software is distributed WITHOUT ANY WARRANTY and without even the
+ implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ 
+ AUTHOR:
+ 
+ a.cottin@carbomap.com  -  http://www.carbomap.com
+ 
+ HISTORY:
+ 
+ 11/12/2015 - Creation by Antoine C.
+ 
+ -----------------------------------------------------------------------------
+ */
+
+
 
 #ifndef cGeoKey_hpp
 #define cGeoKey_hpp

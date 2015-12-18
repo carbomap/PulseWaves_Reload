@@ -1,26 +1,68 @@
-//
-//  PulseWaves.hpp
-//  PulseWaves_Reload
-//
-//  Created by Antoine Cottin on 01/12/2015.
-//  Copyright © 2015 Carbomap. All rights reserved.
-//
+/*
+ -----------------------------------------------------------------------------
+ 
+ FILE NAME:
+ 
+ PulseWaves.hpp
+ 
+ PURPOSE:
+ 
+ Header of the PulseWaves class.
+ 
+ COPYRIGHT:
+ 
+ (c) Antoine Cottin, Carbomap Ltd. - 12/2015
+ 
+ This is free software; you can redistribute and/or modify it under the
+ terms of the GNU Lesser General Licence as published by the Free Software
+ Foundation. See the COPYING file for more information.
+ 
+ This software is distributed WITHOUT ANY WARRANTY and without even the
+ implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ 
+ AUTHOR:
+ 
+ a.cottin@carbomap.com  -  http://www.carbomap.com
+ 
+ HISTORY:
+ 
+ 01/12/2015 - Created by Antoine C.
+ 15/12/2015 - Adding new interface methods - Antoine C.
+                ::getHeader();
+                ::getVlr();
+                ::getPulse();
+                ::getPulsePtr();
+                ::printPulse();
+                ::printPulses();
+ 
+ -----------------------------------------------------------------------------
+ */
+
+
 
 #ifndef PulseWaves_hpp
 #define PulseWaves_hpp
 
+
+
+// C++
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
+#include <string.h>
+
+// Boost
 #include <boost/cstdint.hpp>
 #include <boost/lexical_cast.hpp>
-#include <string.h>
+
+// PulseWaves_Reload
 #include "PulseWavesDefs.hpp"
 #include "cVlr.hpp"
 #include "cPlsHeader.hpp"
 #include "cGeoKey.hpp"
 #include "cPlsPulse.hpp"
 #include "cAVlr.hpp"
+
 
 
 //#pragma pack(push, r1, 1)
@@ -39,7 +81,6 @@
 //void print() const;
 //};
 //#pragma pack(pop, r1)
-
 
 
 
