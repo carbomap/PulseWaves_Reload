@@ -29,6 +29,9 @@
 
 
 
+// C++
+#include <fstream>
+
 // PulseWaves_Reload
 #include "../includes/cPlsPulse.hpp"
 #include "../includes/cPlsHeader.hpp"
@@ -38,6 +41,22 @@
 //-----------------------------------------------------------------------------
 plsPulseRec::plsPulseRec()
 {
+    
+}
+
+
+
+//-----------------------------------------------------------------------------
+void plsPulseRec::getPulses(std::string inFile, cPlsHeader* pPlsHeader, I64 index)
+{
+  
+    std::fstream inPlsFile;
+    inPlsFile.open(inFile, std::ios::in | std::ios::binary);
+    
+    inPlsFile.seekg(pPlsHeader->dataOffet_ + (pPlsHeader->pulseSize_) * index, std::ios::beg);
+    
+    this->read(&inPlsFile);
+    inPlsFile.close();
     
 }
 
@@ -93,19 +112,19 @@ plsPulseArray::plsPulseArray(std::fstream* inFile, cPlsHeader* pPlsHeader)
     // Assigning the header pointer to the data member
     pPlsHeader_ = pPlsHeader;
     nPulses_ = pPlsHeader->nPulses_;
-    plsPulseRec* tempPlsPulseArr = new plsPulseRec[pPlsHeader_->nPulses_];
+    
+    std::vector<plsPulseRec>* plsPulseArr = new std::vector<plsPulseRec>();
     
     std::cout << "Reading " << pPlsHeader->nPulses_ << " pulse records" << std::endl;
     
     for (I64 i = 0; i < nPulses_; i++) {
-        plsPulseRec* tempPulse = new plsPulseRec;
-        tempPulse->read(inFile);
-        tempPlsPulseArr[i] = *tempPulse;
-        tempPulse = 0;
+        plsPulseRec tempPulse;
+        tempPulse.read(inFile);
+        plsPulseArr->push_back(tempPulse);
+
     }
     
-    plsPulseArr_ = tempPlsPulseArr;
-    tempPlsPulseArr = 0;
+    plsPulseArr_ = plsPulseArr;
 }
 
 
@@ -129,13 +148,14 @@ I64 plsPulseArray::getNPulses()
 //-----------------------------------------------------------------------------
 plsPulseRec plsPulseArray::getPulse(I64 index) const
 {
-    return plsPulseArr_[index];
+    plsPulseRec dum = plsPulseArr_->at(index);
+    return dum;
 }
 
 
 
 //-----------------------------------------------------------------------------
-plsPulseRec* plsPulseArray::getPulseAddrs(I64 index)
-{
-    return &(plsPulseArr_[index]);
-}
+//plsPulseRec* plsPulseArray::getPulseAddrs(I64 index)
+//{
+//    return &(plsPulseArr_[index]);
+//}
