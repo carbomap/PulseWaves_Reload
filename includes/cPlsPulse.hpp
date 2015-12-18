@@ -71,6 +71,7 @@ public:
     plsPulseRec();
     ~plsPulseRec(){};
     
+    void getPulses(std::string, cPlsHeader*, I64);
     void read(std::fstream*);
     void print();
     
@@ -87,7 +88,9 @@ class plsPulseArray
 private:
     
     I64             nPulses_;
-    plsPulseRec*    plsPulseArr_;      // Pointer to an plsPulseRec array - which will hold part or all the records
+    
+    std::vector<plsPulseRec>*   plsPulseArr_;      // Pointer to an plsPulseRec array - which will hold part or all the records
+    
     cPlsHeader*     pPlsHeader_;       // Pointer to the file header
     
 public:
@@ -101,7 +104,7 @@ public:
     
     I64 getNPulses();               // Return the number of pulse in the object
     plsPulseRec getPulse(I64) const;      // Return a pulse record
-    plsPulseRec* getPulseAddrs(I64);
+//    plsPulseRec* getPulseAddrs(I64);
     
 };
 
