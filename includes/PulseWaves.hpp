@@ -110,11 +110,14 @@ public:
     static void printSep();
     
     // method to get the file header
-    cPlsHeader* getHeader();
+    cPlsHeader* getHeader() const;
+    
     // method to get the vlr's ID array
-    std::vector<U32> getVlrIDs();
-    // method to get the vlr based on its ID
-    std::shared_ptr<cVlrHeader> getVlr(I32);
+    std::vector<U32> getVlrIDs() const;
+    // method to get the vlr by it ID
+    std::shared_ptr<cVlrHeader> getVlrByID(U32) const;
+    // method to get the vlr based on its index - reading order
+    std::shared_ptr<cVlrHeader> getVlrByIndex(I32) const;
     
     // method to get one pulse record based on its index
     plsPulseRec getPulses(I64) const;

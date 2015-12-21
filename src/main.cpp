@@ -67,10 +67,14 @@ int main(int argc, const char * argv[]) {
 //    }
     
     
+    for (U32 i = 0; i < plsObj.getHeader()->nVLR_; i++) {
+        std::shared_ptr<cVlrHeader> pVlr = plsObj.getVlr(i);
+        pVlr->cVlrHeader::print();
+        pVlr->print();
+    }
     
-    std::shared_ptr<cVlrHeader> pVlr = plsObj.getVlr(3);
-    pVlr->print();
     plsPulseRec dum = plsObj.getPulses(3);
+    std::shared_ptr<cVlrHeader> dd = plsObj.getVlrByID(200012);
 //    dum.print();
 
 

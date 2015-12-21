@@ -303,7 +303,7 @@ void PulseWaves::readAVLR()
 
 
 //-----------------------------------------------------------------------------
-cPlsHeader* PulseWaves::getHeader()
+cPlsHeader* PulseWaves::getHeader() const
 {
     return plsHeader_;
 }
@@ -312,7 +312,7 @@ cPlsHeader* PulseWaves::getHeader()
 
 
 //-----------------------------------------------------------------------------
-std::vector<U32> PulseWaves::getVlrIDs()
+std::vector<U32> PulseWaves::getVlrIDs() const
 {
 
     return plsVlrID_;
@@ -320,16 +320,23 @@ std::vector<U32> PulseWaves::getVlrIDs()
 }
 
 
+
 //-----------------------------------------------------------------------------
-std::shared_ptr<cVlrHeader> PulseWaves::getVlr(I32 index)
+std::shared_ptr<cVlrHeader> PulseWaves::getVlrByID(U32 ID) const
+{
+    
+    for(size_t i=0; i < plsVlrID_.size(); i++){
+        if (plsVlrID_[i] == ID) { return plsSuperVlrArr_.at(i); }
+    };
+    
+}
+
+
+
+//-----------------------------------------------------------------------------
+std::shared_ptr<cVlrHeader> PulseWaves::getVlrByIndex(I32 index) const
 {
     return plsSuperVlrArr_.at(index);
-    
-//    if (plsVLRType_[index] < 200) {
-//        return plsGeoKey_[plsVLRType_[index] - 100];
-//    } else {
-//        return plsVlrArr_[plsVLRType_[index] - 200];
-//    }
 
 }
 
