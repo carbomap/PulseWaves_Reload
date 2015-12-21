@@ -51,6 +51,7 @@
 #include <fstream>
 #include <string.h>
 #include <vector>
+#include <memory>
 
 // Boost
 #include <boost/cstdint.hpp>

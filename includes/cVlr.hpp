@@ -69,7 +69,7 @@ public:
 //    virtual void readVLR(std::fstream&);
     
     cVlrHeader();
-    ~cVlrHeader(){};
+    virtual ~cVlrHeader(){};
 
     
     // this method will test the type of VLR before
