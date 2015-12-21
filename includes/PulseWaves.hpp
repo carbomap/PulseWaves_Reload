@@ -74,7 +74,11 @@ class PulseWaves
 	std::string wvsFilePath_;       // String representing the fully qualified WVS file name path
     std::fstream* inPlsFile_;       // fstream pointer to the pls file
     cPlsHeader* plsHeader_;         // Pointer to an instance of the PLS HEADER file
+    std::vector<U32> plsVlrID_;      // vector that contains the VLR ID in reading orfer
+    std::vector<U32> plsVLRType_;      // vector that contains the VLR ID in reading orfer
     std::vector<cVlrHeader> plsVlrArr_;         // pointer to an array of VLR objects
+    std::vector<cGeoKey> plsGeoKey_;            // pointer to an array containing the Geokeys
+    std::vector<std::unique_ptr<cVlrHeader> > plsSuperVlrArr_;
     plsPulseArray* plsPulseArr_;    // Pointer to the Pulse Array
     cAVlrHeader* plsAVlrArr_;       // Pointer to an array that holds the AVLR records
     
@@ -106,6 +110,8 @@ public:
     
     // method to get the file header
     cPlsHeader* getHeader();
+    // method to get the vlr's ID array
+    std::vector<U32> getVlrIDs();
     // method to get the vlr based on its ID
     cVlrHeader getVlr(I32);
     

@@ -87,7 +87,7 @@ public:
     cGeoKeyDir();
     ~cGeoKeyDir()
     {
-        cGeoKeySubDirArr_ = 0;
+//        cGeoKeySubDirArr_ = 0;
     };
     
     void read(std::fstream*);
@@ -96,7 +96,7 @@ public:
     
 private:
     
-    cGeoKeyDir_subKey* cGeoKeySubDirArr_;
+    std::vector<cGeoKeyDir_subKey> cGeoKeySubDirArr_;
     
     
 };

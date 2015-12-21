@@ -133,7 +133,7 @@ void cGeoKeyDir::readGeoKeySubDir(std::fstream* inFile)
 {
     
     // creating an array of GeokeySubDir
-    cGeoKeyDir_subKey* cGeoKeySubDirArr_ = new cGeoKeyDir_subKey[gKeyNumberOfKeys_];
+//    cGeoKeyDir_subKey* cGeoKeySubDirArr_ = new cGeoKeyDir_subKey[gKeyNumberOfKeys_];
     
     
     for (int j = 0; j < gKeyNumberOfKeys_; j++)
@@ -146,7 +146,7 @@ void cGeoKeyDir::readGeoKeySubDir(std::fstream* inFile)
         tempGKeySDir.print();
 //        printSep();
         // putting GeoKey header in the vlr array
-        cGeoKeySubDirArr_[j] = tempGKeySDir;
+        cGeoKeySubDirArr_.push_back(tempGKeySDir);
     
     }
     

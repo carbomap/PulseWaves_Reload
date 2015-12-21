@@ -127,12 +127,16 @@ void PulseWaves::readVLR()
 {
 
 //    cVlrHeader* vlrHeaderArr = new cVlrHeader[plsHeader_->nVLR_];
+    U32 gCount = 0;
+    U32 hCount = 0;
     
     // reading the VLR
     for (U32 i = 0; i < plsHeader_->nVLR_; i++)
     {
         // getting the VLR ID record number
         U32 recID = cVlrHeader::whichVLR(inPlsFile_);
+        plsVlrID_.push_back(recID);
+        
 //        std::cout << "reckon recID: " << recID << std::endl;
         
         // instantiate the correct VLR class
@@ -143,7 +147,11 @@ void PulseWaves::readVLR()
             std::cout << "GeoKey descriptor found..." << std::endl;
             cGeoKey tempGK(inPlsFile_, &recID);
 //            vlrHeaderArr[i] = tempGK;
-            plsVlrArr_.push_back(tempGK);
+            
+            plsGeoKey_.push_back(tempGK);
+            
+            plsVLRType_.push_back(gCount + 100);
+            gCount++;
             
         }
         else if (recID >= 100001 && recID < 100255)
@@ -164,6 +172,9 @@ void PulseWaves::readVLR()
             
 //            vlrHeaderArr[i] = *tempVlr;
             plsVlrArr_.push_back(tempVlr);
+            
+            plsVLRType_.push_back(hCount + 200);
+            hCount++;
             
         }
         else if (recID >= 200001  && recID < 200255)
@@ -186,6 +197,9 @@ void PulseWaves::readVLR()
 //            vlrHeaderArr[i] = *tempVlr;
             plsVlrArr_.push_back(tempVlr);
             
+            plsVLRType_.push_back(hCount + 200);
+            hCount++;
+            
         }
         else if (recID >= 300001 && recID < 300255)
         {
@@ -200,6 +214,9 @@ void PulseWaves::readVLR()
             plsVlrArr_.push_back(tempVlr);
 //            vlrHeaderArr[i] = *tempVlr;
             
+            plsVLRType_.push_back(hCount + 200);
+            hCount++;
+            
         }
         else
         {
@@ -213,6 +230,9 @@ void PulseWaves::readVLR()
             
            plsVlrArr_.push_back(tempVlr);
 //            vlrHeaderArr[i] = *tempVlr;
+            
+            plsVLRType_.push_back(hCount + 200);
+            hCount++;
         }
         
         
@@ -264,14 +284,26 @@ cPlsHeader* PulseWaves::getHeader()
 
 
 
+
+//-----------------------------------------------------------------------------
+std::vector<U32> PulseWaves::getVlrIDs()
+{
+
+    return plsVlrID_;
+
+}
+
+
 //-----------------------------------------------------------------------------
 cVlrHeader PulseWaves::getVlr(I32 index)
 {
-//    if (index < (plsHeader_->nVLR_)) {
-//        std::cout << "Index outside the allowed range..." << std::endl;
-//    } else {
-        return plsVlrArr_.at(index);
-//    }
+    
+    if (plsVLRType_[index] < 200) {
+        return plsGeoKey_[plsVLRType_[index] - 100];
+    } else {
+        return plsVlrArr_[plsVLRType_[index] - 200];
+    }
+
 }
 
 
@@ -295,7 +327,7 @@ std::vector<plsPulseRec> PulseWaves::getPulses(std::vector<I64> index) const
 {
     
     std::vector<plsPulseRec> tempPulseVec(index.size());
-//    for (auto i: index)
+
     for (size_t i = 0; i < index.size(); i++)
     {
         tempPulseVec[i] = plsPulseArr_->getPulse(i);
@@ -311,7 +343,23 @@ std::vector<plsPulseRec> PulseWaves::getPulses(std::vector<I64> index) const
 plsPulseRec PulseWaves::getWaves(I64 index) const
 {
     
-
+    plsPulseRec tempulse = this->getPulses(index);
+    
+    // get waveform byte offset
+    I64 byteOffset = tempulse.waveOffset_;
+    
+    // get puslse descriptor and parse it
+    I8 plsVlrID = tempulse.pulseDesIndex_ & '000000000000000111';
+    
+    // get corresponding VLR
+    
+    
+    // checking if any Extra-Bytes exist and if so, moving forward
+    
+    
+    // extracting information from sampling records
+    
+    
     
 }
 
