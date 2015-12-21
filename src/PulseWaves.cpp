@@ -126,7 +126,7 @@ void PulseWaves::readHeader()
 void PulseWaves::readVLR()
 {
 
-    cVlrHeader* vlrHeaderArr = new cVlrHeader[plsHeader_->nVLR_];
+//    cVlrHeader* vlrHeaderArr = new cVlrHeader[plsHeader_->nVLR_];
     
     // reading the VLR
     for (U32 i = 0; i < plsHeader_->nVLR_; i++)
@@ -142,7 +142,8 @@ void PulseWaves::readVLR()
             printSep();
             std::cout << "GeoKey descriptor found..." << std::endl;
             cGeoKey tempGK(inPlsFile_, &recID);
-            vlrHeaderArr[i] = tempGK;
+//            vlrHeaderArr[i] = tempGK;
+            plsVlrArr_.push_back(tempGK);
             
         }
         else if (recID >= 100001 && recID < 100255)
@@ -151,16 +152,18 @@ void PulseWaves::readVLR()
             printSep();
             std::cout << "Scanner descriptor found..." << std::endl;
             
-            cVlrScanner* tempVlr = new cVlrScanner;
+//            cVlrScanner* tempVlr = new cVlrScanner;
+            cVlrScanner tempVlr;
+
+            tempVlr.cVlrHeader::read(inPlsFile_);
+            tempVlr.cVlrScanner::read(inPlsFile_);
             
-            tempVlr->cVlrHeader::read(inPlsFile_);
-            tempVlr->cVlrScanner::read(inPlsFile_);
-            
-            tempVlr->cVlrHeader::print();
+            tempVlr.cVlrHeader::print();
             printSep();
-            tempVlr->cVlrScanner::print();
+            tempVlr.cVlrScanner::print();
             
-            vlrHeaderArr[i] = *tempVlr;
+//            vlrHeaderArr[i] = *tempVlr;
+            plsVlrArr_.push_back(tempVlr);
             
         }
         else if (recID >= 200001  && recID < 200255)
@@ -169,18 +172,19 @@ void PulseWaves::readVLR()
             printSep();
             std::cout << "Pulse sampling descriptor found..." << std::endl;
             
-            cVlrPulseSampling* tempVlr = new cVlrPulseSampling;
-            tempVlr->cVlrHeader::read(inPlsFile_);
-            tempVlr->cVlrHeader::print();
+            cVlrPulseSampling tempVlr;// = new cVlrPulseSampling;
+            tempVlr.cVlrHeader::read(inPlsFile_);
+            tempVlr.cVlrHeader::print();
             printSep();
             
-            tempVlr->cVlrPulseSampling::read(inPlsFile_);
-            tempVlr->cVlrPulseSampling::print();
+            tempVlr.cVlrPulseSampling::read(inPlsFile_);
+            tempVlr.cVlrPulseSampling::print();
             printSep();
             
-            tempVlr->cVlrPulseSampling::read_SamplingRecords(inPlsFile_);
+            tempVlr.cVlrPulseSampling::read_SamplingRecords(inPlsFile_);
             
-            vlrHeaderArr[i] = *tempVlr;
+//            vlrHeaderArr[i] = *tempVlr;
+            plsVlrArr_.push_back(tempVlr);
             
         }
         else if (recID >= 300001 && recID < 300255)
@@ -188,12 +192,13 @@ void PulseWaves::readVLR()
             printSep();
             std::cout << "Lookup Table descriptor found..." << std::endl;
             
-            cLutHeader* tempVlr = new cLutHeader;
-            tempVlr->cVlrHeader::read(inPlsFile_);
-            tempVlr->read(inPlsFile_);
-            tempVlr->readLutTable(inPlsFile_);
+            cLutHeader tempVlr;// = new cLutHeader;
+            tempVlr.cVlrHeader::read(inPlsFile_);
+            tempVlr.read(inPlsFile_);
+            tempVlr.readLutTable(inPlsFile_);
             
-            vlrHeaderArr[i] = *tempVlr;
+            plsVlrArr_.push_back(tempVlr);
+//            vlrHeaderArr[i] = *tempVlr;
             
         }
         else
@@ -202,18 +207,19 @@ void PulseWaves::readVLR()
             std::cout << "Generic VLR descriptor found..." << std::endl;
             std::cout << "VLR #" << recID << std::endl;
             
-            cVlrHeader* tempVlr = new cVlrHeader;
-            tempVlr->cVlrHeader::read(inPlsFile_);
-            inPlsFile_->seekg(tempVlr->recordLengthAfterHeader_, std::ios::cur);
+            cVlrHeader tempVlr;// = new cVlrHeader;
+            tempVlr.cVlrHeader::read(inPlsFile_);
+            inPlsFile_->seekg(tempVlr.recordLengthAfterHeader_, std::ios::cur);
             
-            vlrHeaderArr[i] = *tempVlr;
+           plsVlrArr_.push_back(tempVlr);
+//            vlrHeaderArr[i] = *tempVlr;
         }
         
         
         
     }
     
-    plsVlrArr_ = vlrHeaderArr;
+//    plsVlrArr_ = vlrHeaderArr;
     
 };
 
@@ -259,13 +265,13 @@ cPlsHeader* PulseWaves::getHeader()
 
 
 //-----------------------------------------------------------------------------
-cVlrHeader* PulseWaves::getVlr(I32 index)
+cVlrHeader PulseWaves::getVlr(I32 index)
 {
-    if (index <= plsHeader_->nVLR_) {
-        std::cout << "Index outside the allowed range..." << std::endl;
-    } else {
-        return &plsVlrArr_[index];
-    }
+//    if (index < (plsHeader_->nVLR_)) {
+//        std::cout << "Index outside the allowed range..." << std::endl;
+//    } else {
+        return plsVlrArr_.at(index);
+//    }
 }
 
 
@@ -289,7 +295,8 @@ std::vector<plsPulseRec> PulseWaves::getPulses(std::vector<I64> index) const
 {
     
     std::vector<plsPulseRec> tempPulseVec(index.size());
-    for (auto i: index)
+//    for (auto i: index)
+    for (size_t i = 0; i < index.size(); i++)
     {
         tempPulseVec[i] = plsPulseArr_->getPulse(i);
     }

@@ -36,10 +36,13 @@
 #ifndef cGeoKey_hpp
 #define cGeoKey_hpp
 
+// C++
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
 #include <vector>
+
+// PulseWaves_Reload
 #include "PulseWavesDefs.hpp"
 #include "cVlr.hpp"
 
@@ -153,18 +156,18 @@ class cGeoKey : public cVlrHeader
 {
     
 public:
+
+    
+    std::vector<cGeoKeyDir>     cGeoKeyDir_;
+    std::vector<cGeoKeyDblPrm>  cGeoKeyDP_;
+    std::vector<cGeoKeyAscii>   cGeoKeyAscii_;
     
     cGeoKey(std::fstream*, U32*);
     ~cGeoKey(){};
     
     void read(std::fstream*);
     void print() const;
-    
-private:
-    
-    cGeoKeyDir*     cGeoKeyDir_;
-    cGeoKeyDblPrm*  cGeoKeyDP_;
-    cGeoKeyAscii*   cGeoKeyAscii_;
+
     
 };
 #pragma pack(pop)

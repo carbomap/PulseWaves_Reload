@@ -32,29 +32,40 @@
  */
 
 
+// C++
+#include <iostream>
+
 // BOOST
 #include <boost/lexical_cast.hpp>
 #include <boost/variant.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/timer/timer.hpp>
 
-#include <iostream>
+// PulseWaves_Reload
 #include "../includes/PulseWaves.hpp"
 
 int main(int argc, const char * argv[]) {
 
 //	PulseWaves plsObj("../../sample_data/riegl_example1.pls");
-    PulseWaves plsObj("/Users/antoine/Processing_Temp_Folder/Bertholdstein_process_need_sptaial_indexing/q560/Bertholdstein - Q560_9996619 - 150528_133849 - originalpoints.pls");
+    PulseWaves plsObj("/Users/moi/Documents/Carbomap/2015_Multispectral_Lidar_Defra/Riegl/pulsewaves/q560/Bertholdstein - Q560_9996619 - 150528_133849 - originalpoints.pls");
     
     boost::timer::cpu_timer timer;
 
-    cPlsHeader* pPlsHeader = plsObj.getHeader();
- 
-    for (I64 i = 0; i < pPlsHeader->nPulses_; i++) {
-//        plsObj.printPulse(tr);
-        plsPulseRec dum = plsObj.getPulses(i);
-//        dum.print();
+    I64 tr = 4378;
+    I32 nVlr = 2;
+    
+    for (int i = 0; i < 10; i++) {
+        cVlrHeader pVlr = plsObj.getVlr(i);
+        pVlr.print();
+        std::cout << sizeof(pVlr) << std::endl;
     }
+    
+    
+    
+    
+    plsPulseRec dum = plsObj.getPulses(tr);
+//    dum.print();
+
 
     
     

@@ -53,10 +53,12 @@ cGeoKey::cGeoKey(std::fstream* inFile, U32* recID) : cVlrHeader()
         this->cVlrHeader::read(inFile);
         this->cVlrHeader::print();
         
-        cGeoKeyDir* GeoKeyDir_ = new cGeoKeyDir;
-        GeoKeyDir_->read(inFile);
-        GeoKeyDir_->print();
-        GeoKeyDir_->readGeoKeySubDir(inFile);
+        cGeoKeyDir GeoKeyDir;// = new cGeoKeyDir;
+        GeoKeyDir.read(inFile);
+        GeoKeyDir.print();
+        GeoKeyDir.readGeoKeySubDir(inFile);
+        
+        cGeoKeyDir_.push_back(GeoKeyDir);
         
     }
     else if (*recID == 34736)
@@ -64,23 +66,25 @@ cGeoKey::cGeoKey(std::fstream* inFile, U32* recID) : cVlrHeader()
        
         std::cout << "GeoDoubleParamsTag Record found..." << std::endl;
         
-        cGeoKeyDblPrm*  cGeoKeyDP_ = new cGeoKeyDblPrm;
-        cGeoKeyDP_->cVlrHeader::read(inFile);
-        cGeoKeyDP_->cVlrHeader::print();
-        cGeoKeyDP_->read(inFile);
-        cGeoKeyDP_->print();
+        cGeoKeyDblPrm  GeoKeyDP;// = new cGeoKeyDblPrm;
+        GeoKeyDP.cVlrHeader::read(inFile);
+        GeoKeyDP.cVlrHeader::print();
+        GeoKeyDP.read(inFile);
+        GeoKeyDP.print();
         
+        cGeoKeyDP_.push_back(GeoKeyDP);
         
     }
     else if (*recID == 34737)
     {
         std::cout << "GeoAsciiParamsTag Record found..." << std::endl;
-        cGeoKeyAscii*  cGeoKeyAC_ = new cGeoKeyAscii;
-        cGeoKeyAC_->cVlrHeader::read(inFile);
-        cGeoKeyAC_->cVlrHeader::print();
-        cGeoKeyAC_->read(inFile);
-        cGeoKeyAC_->print();
+        cGeoKeyAscii  GeoKeyAC;// = new cGeoKeyAscii;
+        GeoKeyAC.cVlrHeader::read(inFile);
+        GeoKeyAC.cVlrHeader::print();
+        GeoKeyAC.read(inFile);
+        GeoKeyAC.print();
         
+        cGeoKeyAscii_.push_back(GeoKeyAC);
     }
 
 }

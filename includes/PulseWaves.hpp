@@ -50,6 +50,7 @@
 #include <iostream>
 #include <fstream>
 #include <string.h>
+#include <vector>
 
 // Boost
 #include <boost/cstdint.hpp>
@@ -65,25 +66,6 @@
 
 
 
-//#pragma pack(push, r1, 1)
-//class cWvsHeader
-//{
-//public:
-//
-//	I8      signature[16];
-//	U32     compression;
-//  U8      reserve[44];
-//
-//cWvsHeader();
-//~cWvsHeader();
-//
-//void read(std::fstream*);
-//void print() const;
-//};
-//#pragma pack(pop, r1)
-
-
-
 class PulseWaves
 {
 
@@ -92,7 +74,7 @@ class PulseWaves
 	std::string wvsFilePath_;       // String representing the fully qualified WVS file name path
     std::fstream* inPlsFile_;       // fstream pointer to the pls file
     cPlsHeader* plsHeader_;         // Pointer to an instance of the PLS HEADER file
-    cVlrHeader* plsVlrArr_;         // pointer to an array of VLR objects
+    std::vector<cVlrHeader> plsVlrArr_;         // pointer to an array of VLR objects
     plsPulseArray* plsPulseArr_;    // Pointer to the Pulse Array
     cAVlrHeader* plsAVlrArr_;       // Pointer to an array that holds the AVLR records
     
@@ -114,7 +96,7 @@ public:
         
         inPlsFile_ = 0;
         plsHeader_ = 0;
-        plsVlrArr_ = 0;
+//        plsVlrArr_ = 0;
         plsPulseArr_ = 0;
         plsAVlrArr_ = 0;
         
@@ -125,13 +107,16 @@ public:
     // method to get the file header
     cPlsHeader* getHeader();
     // method to get the vlr based on its ID
-    cVlrHeader* getVlr(I32);
+    cVlrHeader getVlr(I32);
+    
     // method to get one pulse record based on its index
     plsPulseRec getPulses(I64) const;
     // method to get an array of pulse records based on an index array
     std::vector<plsPulseRec> getPulses(std::vector<I64>) const;
     
+    // method to get one wave based on its index
     plsPulseRec getWaves(I64) const;
+    // method to get an array of pulses based on an index array
     std::vector<plsPulseRec> getWaves(std::vector<I64>) const;
     
     
