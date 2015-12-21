@@ -148,20 +148,19 @@ void PulseWaves::readVLR()
             printSep();
             std::cout << "GeoKey descriptor found..." << std::endl;
             
-//            std::unique_ptr<cGeoKey> tempGK(new cGeoKey(inPlsFile_, &recID));
+            std::unique_ptr<cGeoKey> tempGK(new cGeoKey(inPlsFile_, &recID));
             
-            cGeoKey tempGK(inPlsFile_, &recID);
+//            cGeoKey* tempGK = new cGeoKey(inPlsFile_, &recID);
             
-//            std::unique_ptr<cGeoKey> tempGK (new cGeoKey(inPlsFile_, &recID));
             
 //            vlrHeaderArr[i] = tempGK;
             
-            plsGeoKey_.push_back(tempGK);
+//            plsGeoKey_.push_back(tempGK);
             
             plsVLRType_.push_back(gCount + 100);
             gCount++;
             
-//            plsSuperVlrArr_.push_back( std::unique_ptr<cGeoKey> (new cGeoKey(inPlsFile_, &recID)) );
+            plsSuperVlrArr_.push_back( std::move(tempGK) );
             
         }
         else if (recID >= 100001 && recID < 100255)
@@ -171,23 +170,23 @@ void PulseWaves::readVLR()
             std::cout << "Scanner descriptor found..." << std::endl;
             
 //            cVlrScanner* tempVlr = new cVlrScanner;
-//            std::unique_ptr<cVlrScanner> tempVlr (new cVlrScanner());
-            cVlrScanner tempVlr;
+            std::unique_ptr<cVlrScanner> tempVlr (new cVlrScanner());
+//            cVlrScanner tempVlr;
 
-            tempVlr.cVlrHeader::read(inPlsFile_);
-            tempVlr.cVlrScanner::read(inPlsFile_);
+            tempVlr->cVlrHeader::read(inPlsFile_);
+            tempVlr->cVlrScanner::read(inPlsFile_);
             
-            tempVlr.cVlrHeader::print();
+            tempVlr->cVlrHeader::print();
             printSep();
-            tempVlr.cVlrScanner::print();
+            tempVlr->cVlrScanner::print();
             
 //            vlrHeaderArr[i] = *tempVlr;
-            plsVlrArr_.push_back(tempVlr);
+//            plsVlrArr_.push_back(tempVlr);
             
             plsVLRType_.push_back(hCount + 200);
             hCount++;
             
-//            plsSuperVlrArr_.push_back( std::move(tempVlr) );
+            plsSuperVlrArr_.push_back( std::move(tempVlr) );
             
         }
         else if (recID >= 200001  && recID < 200255)
@@ -196,22 +195,26 @@ void PulseWaves::readVLR()
             printSep();
             std::cout << "Pulse sampling descriptor found..." << std::endl;
             
-            cVlrPulseSampling tempVlr;// = new cVlrPulseSampling;
-            tempVlr.cVlrHeader::read(inPlsFile_);
-            tempVlr.cVlrHeader::print();
+            std::unique_ptr<cVlrPulseSampling> tempVlr (new cVlrPulseSampling());
+//            cVlrPulseSampling tempVlr;// = new cVlrPulseSampling;
+            tempVlr->cVlrHeader::read(inPlsFile_);
+            tempVlr->cVlrHeader::print();
             printSep();
             
-            tempVlr.cVlrPulseSampling::read(inPlsFile_);
-            tempVlr.cVlrPulseSampling::print();
+            tempVlr->cVlrPulseSampling::read(inPlsFile_);
+            tempVlr->cVlrPulseSampling::print();
             printSep();
             
-            tempVlr.cVlrPulseSampling::read_SamplingRecords(inPlsFile_);
+            tempVlr->cVlrPulseSampling::read_SamplingRecords(inPlsFile_);
             
 //            vlrHeaderArr[i] = *tempVlr;
-            plsVlrArr_.push_back(tempVlr);
+//            plsVlrArr_.push_back(tempVlr);
             
             plsVLRType_.push_back(hCount + 200);
             hCount++;
+            
+            plsSuperVlrArr_.push_back( std::move(tempVlr) );
+
             
         }
         else if (recID >= 300001 && recID < 300255)
@@ -219,16 +222,21 @@ void PulseWaves::readVLR()
             printSep();
             std::cout << "Lookup Table descriptor found..." << std::endl;
             
-            cLutHeader tempVlr;// = new cLutHeader;
-            tempVlr.cVlrHeader::read(inPlsFile_);
-            tempVlr.read(inPlsFile_);
-            tempVlr.readLutTable(inPlsFile_);
+//            cLutHeader tempVlr;// = new cLutHeader;
+            std::unique_ptr<cLutHeader> tempVlr (new cLutHeader());
             
-            plsVlrArr_.push_back(tempVlr);
+            tempVlr->cVlrHeader::read(inPlsFile_);
+            tempVlr->read(inPlsFile_);
+            tempVlr->readLutTable(inPlsFile_);
+            
+//            plsVlrArr_.push_back(tempVlr);
 //            vlrHeaderArr[i] = *tempVlr;
             
             plsVLRType_.push_back(hCount + 200);
             hCount++;
+            
+            plsSuperVlrArr_.push_back( std::move(tempVlr) );
+
             
         }
         else
@@ -237,15 +245,20 @@ void PulseWaves::readVLR()
             std::cout << "Generic VLR descriptor found..." << std::endl;
             std::cout << "VLR #" << recID << std::endl;
             
-            cVlrHeader tempVlr;// = new cVlrHeader;
-            tempVlr.cVlrHeader::read(inPlsFile_);
-            inPlsFile_->seekg(tempVlr.recordLengthAfterHeader_, std::ios::cur);
+//            cVlrHeader tempVlr;// = new cVlrHeader;
+            std::unique_ptr<cVlrHeader> tempVlr (new cVlrHeader());
             
-           plsVlrArr_.push_back(tempVlr);
+            tempVlr->cVlrHeader::read(inPlsFile_);
+            inPlsFile_->seekg(tempVlr->recordLengthAfterHeader_, std::ios::cur);
+            
+//           plsVlrArr_.push_back(tempVlr);
 //            vlrHeaderArr[i] = *tempVlr;
             
             plsVLRType_.push_back(hCount + 200);
             hCount++;
+            
+            plsSuperVlrArr_.push_back( std::move(tempVlr) );
+
         }
         
         
@@ -308,14 +321,15 @@ std::vector<U32> PulseWaves::getVlrIDs()
 
 
 //-----------------------------------------------------------------------------
-cVlrHeader PulseWaves::getVlr(I32 index)
+std::shared_ptr<cVlrHeader> PulseWaves::getVlr(I32 index)
 {
+    return plsSuperVlrArr_.at(index);
     
-    if (plsVLRType_[index] < 200) {
-        return plsGeoKey_[plsVLRType_[index] - 100];
-    } else {
-        return plsVlrArr_[plsVLRType_[index] - 200];
-    }
+//    if (plsVLRType_[index] < 200) {
+//        return plsGeoKey_[plsVLRType_[index] - 100];
+//    } else {
+//        return plsVlrArr_[plsVLRType_[index] - 200];
+//    }
 
 }
 

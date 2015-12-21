@@ -47,7 +47,7 @@
 int main(int argc, const char * argv[]) {
 
 //	PulseWaves plsObj("../../sample_data/riegl_example1.pls");
-    PulseWaves plsObj("/Users/antoine/Desktop/Berth.pls"); ///Users/moi/Documents/Carbomap/2015_Multispectral_Lidar_Defra/Riegl/pulsewaves/q560/Bertholdstein - Q560_9996619 - 150528_133849 - originalpoints.pls");
+    PulseWaves plsObj("/Users/moi/Documents/Carbomap/2015_Multispectral_Lidar_Defra/Riegl/pulsewaves/q560/Bertholdstein - Q560_9996619 - 150528_133849 - originalpoints.pls");
     
     std::vector<U32> temp = plsObj.getVlrIDs();
     for (auto i : temp) {
@@ -68,7 +68,8 @@ int main(int argc, const char * argv[]) {
     
     
     
-    cVlrHeader pVlr = plsObj.getVlr(3);
+    std::shared_ptr<cVlrHeader> pVlr = plsObj.getVlr(3);
+    pVlr->print();
     plsPulseRec dum = plsObj.getPulses(3);
 //    dum.print();
 

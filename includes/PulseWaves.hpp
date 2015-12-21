@@ -79,7 +79,7 @@ class PulseWaves
     std::vector<U32> plsVLRType_;      // vector that contains the VLR ID in reading orfer
     std::vector<cVlrHeader> plsVlrArr_;         // pointer to an array of VLR objects
     std::vector<cGeoKey> plsGeoKey_;            // pointer to an array containing the Geokeys
-    std::vector<std::unique_ptr<cVlrHeader > > plsSuperVlrArr_;
+    std::vector<std::shared_ptr<cVlrHeader > > plsSuperVlrArr_;
     plsPulseArray* plsPulseArr_;    // Pointer to the Pulse Array
     cAVlrHeader* plsAVlrArr_;       // Pointer to an array that holds the AVLR records
     
@@ -114,7 +114,7 @@ public:
     // method to get the vlr's ID array
     std::vector<U32> getVlrIDs();
     // method to get the vlr based on its ID
-    cVlrHeader getVlr(I32);
+    std::shared_ptr<cVlrHeader> getVlr(I32);
     
     // method to get one pulse record based on its index
     plsPulseRec getPulses(I64) const;
