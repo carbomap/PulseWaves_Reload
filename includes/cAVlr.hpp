@@ -55,7 +55,7 @@ public:
     I8       description_[PLS_DESCRIPTION_SIZE];
     
     cAVlrHeader();
-    ~cAVlrHeader(){};
+    virtual ~cAVlrHeader(){};
     
     void read(std::fstream*);
     void print();

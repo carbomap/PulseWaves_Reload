@@ -31,7 +31,9 @@
 
 // C++
 #include <iostream>
+#include <vector>
 #include <fstream>
+#include <memory>
 
 // BOOST
 #include <boost/lexical_cast.hpp>
@@ -145,13 +147,20 @@ void PulseWaves::readVLR()
             
             printSep();
             std::cout << "GeoKey descriptor found..." << std::endl;
-            cGeoKey tempGK(inPlsFile_, &recID);
+//            std::unique_ptr<cGeoKey> tempGK(new cGeoKey(inPlsFile_, &recID));
+            
+//            cGeoKey tempGK(inPlsFile_, &recID);
+            
+            std::unique_ptr<cGeoKey> tempGK (new cGeoKey(inPlsFile_, &recID));
+            
 //            vlrHeaderArr[i] = tempGK;
             
-            plsGeoKey_.push_back(tempGK);
+//            plsGeoKey_.push_back(tempGK);
             
             plsVLRType_.push_back(gCount + 100);
             gCount++;
+            
+            plsSuperVlrArr_.push_back( std::move(tempGK) );
             
         }
         else if (recID >= 100001 && recID < 100255)
@@ -161,20 +170,23 @@ void PulseWaves::readVLR()
             std::cout << "Scanner descriptor found..." << std::endl;
             
 //            cVlrScanner* tempVlr = new cVlrScanner;
-            cVlrScanner tempVlr;
+            std::unique_ptr<cVlrScanner> tempVlr (new cVlrScanner());
+//            cVlrScanner tempVlr;
 
-            tempVlr.cVlrHeader::read(inPlsFile_);
-            tempVlr.cVlrScanner::read(inPlsFile_);
+            tempVlr->cVlrHeader::read(inPlsFile_);
+            tempVlr->cVlrScanner::read(inPlsFile_);
             
-            tempVlr.cVlrHeader::print();
+            tempVlr->cVlrHeader::print();
             printSep();
-            tempVlr.cVlrScanner::print();
+            tempVlr->cVlrScanner::print();
             
 //            vlrHeaderArr[i] = *tempVlr;
-            plsVlrArr_.push_back(tempVlr);
+//            plsVlrArr_.push_back(tempVlr);
             
             plsVLRType_.push_back(hCount + 200);
             hCount++;
+            
+            plsSuperVlrArr_.push_back( std::move(tempVlr) );
             
         }
         else if (recID >= 200001  && recID < 200255)
