@@ -69,6 +69,12 @@ public:
 //    virtual void readVLR(std::fstream&);
     
     cVlrHeader();
+//    cVlrHeader(const cVlrHeader& nVlrH):
+//        userID_(nVlrH.userID_[PLS_USER_ID_SIZE]),
+//        recordID_(nVlrH.recordID_),
+//        recordLengthAfterHeader_(nVlrH.recordLengthAfterHeader_),
+//        description_(nVlrH.description_)
+//    {};
     virtual ~cVlrHeader(){};
 
     
