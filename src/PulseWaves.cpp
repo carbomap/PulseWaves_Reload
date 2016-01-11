@@ -161,7 +161,7 @@ void PulseWaves::readVLR()
             plsVLRType_.push_back(gCount + 100);
             gCount++;
             
-//            plsSuperVlrArr_.push_back( std::unique_ptr<cGeoKey> (new cGeoKey(inPlsFile_, &recID)) );
+            plsSuperVlrArr_.push_back( std::unique_ptr<cGeoKey> (new cGeoKey(inPlsFile_, &recID)) );
             
         }
         else if (recID >= 100001 && recID < 100255)
