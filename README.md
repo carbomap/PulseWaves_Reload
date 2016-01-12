@@ -35,7 +35,7 @@ BOOST (http://boost.org)
     only library that needs to be installed. For detailed instructions on 
     how to install boost, please see htpp://boost.org. 
   - For Windows, 
-    see: http://www.boost.org/doc/libs/1_55_0/more/getting_started/windows.html 
+    see: http://www.boost.org/doc/libs/1_59_0/more/getting_started/windows.html 
   - For Unix, open terminal and type:
     > sudo apt-get install libboost-dev-all
     > sudo apt-get install aptitude
