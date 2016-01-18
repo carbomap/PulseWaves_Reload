@@ -102,8 +102,14 @@ public:
         plsPulseArr_ = 0;
     }
     
-    I64 getNPulses();               // Return the number of pulse in the object
-    plsPulseRec getPulse(I64) const;      // Return a pulse record
+    I64 getNPulses();                               // Return the number of pulse in the object
+    plsPulseRec getPulse(I64) const;                // Return a pulse record
+    std::vector<F32> getAnchorPoints();
+    std::vector<F32> getTargetPoints();
+    std::vector<F32> getFirstSampleCoordinate();
+    std::vector<F32> getLastSampleCoordinate();
+    
+    
 //    plsPulseRec* getPulseAddrs(I64);
     
 };

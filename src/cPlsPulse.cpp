@@ -159,3 +159,32 @@ plsPulseRec plsPulseArray::getPulse(I64 index) const
 //{
 //    return &(plsPulseArr_[index]);
 //}
+
+
+
+//-----------------------------------------------------------------------------
+std::vector<F32> plsPulseArray::getFirstSampleCoordinate()
+{
+    
+    std::vector<std::vector<F32> > tab (3);
+    
+//    x_{first} = x_{anchor} + first_returning_sample * dx
+//    
+//    for (size_t i =0; i < plsPulseArr_.size(); i++) {
+//        plsPulseRec tempPulse = plsPulseArr_->at(i);
+//        tempPulse->first
+//    }
+//    (plsPulseArr_->at(0)->firstReturn_ * pPlsHeader_->scaleX_) + pPlsHeader_->offsetX_;
+//    (plsPulseArr_->at(0) * pPlsHeader_->scaleY_) + pPlsHeader_->offsetY_;
+//    (plsPulseArr_->at(0) * pPlsHeader_->scaleZ_) + pPlsHeader_->offsetZ_;
+//    return 1;
+}
+
+
+
+//-----------------------------------------------------------------------------
+std::vector<F32> plsPulseArray::getLastSampleCoordinate()
+{
+//    return &(plsPulseArr_[index]);
+}
+

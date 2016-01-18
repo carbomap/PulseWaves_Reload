@@ -54,7 +54,8 @@
 PulseWaves::PulseWaves(std::string inFile)
 {
 	
-   
+    std::unique_ptr<cVlrHeader> plsSuperVlrArr_(new cVlrHeader);
+    
     plsFilePath_ = inFile;
     // instantiation of the fstream class object
     
@@ -188,6 +189,7 @@ void PulseWaves::readVLR()
             
             plsVLRType_.push_back(hCount + 200);
             hCount++;
+            
             
             plsSuperVlrArr_.push_back( std::move(tempVlr) );
             

@@ -68,7 +68,7 @@ int main(int argc, const char * argv[]) {
     
     
     for (U32 i = 0; i < plsObj.getHeader()->nVLR_; i++) {
-        std::shared_ptr<cVlrHeader> pVlr = plsObj.getVlr(i);
+        std::shared_ptr<cVlrHeader> pVlr = plsObj.getVlrByIndex(i);
         pVlr->cVlrHeader::print();
         pVlr->print();
     }
