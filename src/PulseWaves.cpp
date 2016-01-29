@@ -162,8 +162,8 @@ void PulseWaves::readVLR()
             gCount++;
             
 
-            plsSuperVlrArr_.push_back( std::unique_ptr<cGeoKey> (new cGeoKey(inPlsFile_, &recID)) );
-//            plsSuperVlrArr_.push_back( std::move(tempGK) );
+//            plsSuperVlrArr_.push_back( std::unique_ptr<cGeoKey> (new cGeoKey(inPlsFile_, &recID)) );
+            plsSuperVlrArr_.push_back( std::move(tempGK) );
 
             
         }
